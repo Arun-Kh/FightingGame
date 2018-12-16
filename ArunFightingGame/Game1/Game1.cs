@@ -162,7 +162,7 @@ namespace Game1
                 if (Character1.currentState == Character.characterState.Kick1 || Character1.currentState == Character.characterState.Kick2 || Character1.currentState == Character.characterState.Kick3)
                 {
                     Enemy1.getsHit(gameTime, true);
-
+                    //Enemy1.health -= 100;
                     ////subtract a lot of health from enemy
                     //Enemy1.RealEnemyhealth -= 10;
                     //Enemy1.stun(gameTime);
@@ -172,7 +172,7 @@ namespace Game1
                 if ((Character1.currentState == Character.characterState.Punch1) || (Character1.currentState == Character.characterState.Punch2))
                 {
                     Enemy1.getsHit(gameTime, false);
-
+                    //Enemy1.health -= 100;
                     //Enemy1.stun(gameTime);
                     //Enemy1.moveback(false);
                     // Enemy1.getHit(false);
@@ -182,7 +182,7 @@ namespace Game1
                 if (Enemy1.currentState == Character.characterState.Kick1 || Enemy1.currentState == Character.characterState.Kick2 || Enemy1.currentState == Character.characterState.Kick3)
                 {
                     Character1.getsHit(gameTime, true);
-
+                    //Character1.health -= 100;
 
                     //Character1.stun(gameTime);
                     //Character1.moveback(true);
@@ -193,7 +193,7 @@ namespace Game1
                 if (Enemy1.currentState == Character.characterState.Punch1 || Enemy1.currentState == Character.characterState.Punch2)
                 {
                     Character1.getsHit(gameTime, false);
-
+                    //Character1.health -= 100;
 
                     //Character1.stun(gameTime);
                     //Character1.moveback(false);
@@ -279,6 +279,11 @@ namespace Game1
             spriteBatch.DrawString(font, (Character1.hitbox.Intersects(Enemy1.hitbox)).ToString(), Vector2.Zero, Color.Yellow);
 
             spriteBatch.DrawString(font, Enemy1.getHit.ToString(), new Vector2(100, 0), Color.Teal);
+
+            spriteBatch.DrawString(font, Character1.getHit.ToString(), new Vector2(0, 50), Color.LimeGreen);
+
+
+
             //    idle.Draw(spriteBatch);            
             // TODO: Add your drawing code here
             spriteBatch.End();

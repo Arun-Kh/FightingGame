@@ -69,7 +69,7 @@ namespace Game1
         {
             if (!dead)
             {
-                getHit = false;
+                //getHit = false;
                 if (getHit == true)
                 {
                     stun(gameTime);
