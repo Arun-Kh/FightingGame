@@ -58,7 +58,7 @@ namespace Game1
         public int health = 200;
 
         public bool isFlipped = false;
-        TimeSpan reduceHealthTime = TimeSpan.FromMilliseconds(750);
+        TimeSpan reduceHealthTime = TimeSpan.FromMilliseconds(200);
         TimeSpan hitTimer = TimeSpan.Zero;
 
 
@@ -312,7 +312,6 @@ namespace Game1
                     {
                         currentAnimation.FirstFreezeFrame();
                     }
-
                 }
                 if (currentAnimation.Y + currentAnimation.SourceRectangle.Value.Height > graphics.Viewport.Height)
                 {
@@ -469,13 +468,10 @@ namespace Game1
                 if (powerful)
                 {
                     Velocity += 30;
-
                 }
                 else if (!powerful)
                 {
                     Velocity += 20;
-
-
                 }
             }
             else if (currentAnimation.Effects == SpriteEffects.None)
@@ -483,13 +479,10 @@ namespace Game1
                 if (powerful)
                 {
                     Velocity = -30;
-
                 }
                 else if (!powerful)
                 {
                     Velocity -= 20;
-
-
                 }
 
 

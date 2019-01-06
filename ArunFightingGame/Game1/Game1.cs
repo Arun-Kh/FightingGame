@@ -183,7 +183,6 @@ namespace Game1
                 {
                     Character1.getsHit(gameTime, true);
                     //Character1.health -= 100;
-
                     //Character1.stun(gameTime);
                     //Character1.moveback(true);
                     //Character1.health -= 10;
@@ -194,7 +193,6 @@ namespace Game1
                 {
                     Character1.getsHit(gameTime, false);
                     //Character1.health -= 100;
-
                     //Character1.stun(gameTime);
                     //Character1.moveback(false);
                     //Character1.health -= 5;
@@ -204,10 +202,6 @@ namespace Game1
                 //Enemy1.health -= 180;
 
 
-            }
-            if(Character1.currentState == Character.characterState.Death)
-            {
-                
             }
 
             //if (Enemy1.currentState == Character.characterState.Death)

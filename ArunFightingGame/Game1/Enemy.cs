@@ -70,6 +70,7 @@ namespace Game1
             if (!dead)
             {
                 //getHit = false;
+                /*
                 if (getHit == true)
                 {
                     stun(gameTime);
@@ -91,7 +92,7 @@ namespace Game1
                         enemyHitTimer = TimeSpan.Zero;
                     }
                 }
-
+                */
                 if (health < 0)
                 {
                     health = 0;
@@ -100,7 +101,6 @@ namespace Game1
 
                 if (health <= 0)
                 {
-
                     ChangeState(characterState.Death);
                     currentAnimation.LastFreezeFrame();
                     stunBool = true;
@@ -108,9 +108,7 @@ namespace Game1
                     if (enemyDeathTimer > enemyDeathTime)
                     {
                         die();
-
                     }
-
                 }
                 if (!stunBool && !characterDead)
                 {
@@ -161,7 +159,7 @@ namespace Game1
                     {
                         if (!currentAnimation.FirstLoop)
                         {
-                            attack(/*characterDead*/);
+                            attack();
                             attackTimer = TimeSpan.Zero;
                         }
                     }
@@ -209,6 +207,7 @@ namespace Game1
             currentAnimation.Update(gameTime);
 
         }
+
         //public void getsHit(GameTime gameTime)
         //{
         //    if (gametimer >= (reduceHealthTime + gameTime.ElapsedGameTime))
