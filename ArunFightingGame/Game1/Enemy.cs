@@ -25,10 +25,10 @@ namespace Game1
         public new float Speed { get; set; } = 2.4f;
 
         TimeSpan enemyDeathTimer = TimeSpan.Zero;
-        TimeSpan enemyDeathTime = TimeSpan.FromMilliseconds(3000);
+        TimeSpan enemyDeathTime = TimeSpan.FromMilliseconds(150);
 
         TimeSpan enemyHitTimer = TimeSpan.Zero;
-        TimeSpan reduceEnemyHealthTime = TimeSpan.FromMilliseconds(0);
+        TimeSpan reduceEnemyHealthTime = TimeSpan.FromMilliseconds(2);
 
         public bool characterDead = false;
 
@@ -67,10 +67,23 @@ namespace Game1
         }
         public void Update(GameTime gameTime, Vector2 CharacterPostion, bool characterDead)
         {
+            if (health <= 0)
+            {
+                ChangeState(characterState.Death);
+                currentAnimation.LastFreezeFrame();
+                //stunBool = true;                    stun(gameTime);
+                dead = true;
+                enemyDeathTimer += gameTime.ElapsedGameTime;
+                if (enemyDeathTimer > enemyDeathTime)
+                {
+                    die();
+                }
+              //  enemyDeathTimer = TimeSpan.Zero;
+            }
             if (!dead)
             {
                 //getHit = false;
-                /*
+
                 if (getHit == true)
                 {
                     stun(gameTime);
@@ -92,24 +105,28 @@ namespace Game1
                         enemyHitTimer = TimeSpan.Zero;
                     }
                 }
-                */
+                
                 if (health < 0)
                 {
                     health = 0;
                 }
 
 
-                if (health <= 0)
-                {
-                    ChangeState(characterState.Death);
-                    currentAnimation.LastFreezeFrame();
-                    stunBool = true;
-                    enemyDeathTimer += gameTime.ElapsedGameTime;
-                    if (enemyDeathTimer > enemyDeathTime)
-                    {
-                        die();
-                    }
-                }
+                //if (health <= 0)
+                //{
+                //    ChangeState(characterState.Death);
+                //    currentAnimation.LastFreezeFrame();
+                //    //stunBool = true;                    stun(gameTime);
+
+                //    enemyDeathTimer += gameTime.ElapsedGameTime;
+                //    if (enemyDeathTimer > enemyDeathTime)
+                //    {
+
+
+                //        die();
+                //    }
+                //    enemyDeathTimer = TimeSpan.Zero;
+                //}
                 if (!stunBool && !characterDead)
                 {
                     if (currentAnimation.X + 50 < CharacterPostion.X)

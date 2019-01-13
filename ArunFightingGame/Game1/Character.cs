@@ -37,7 +37,7 @@ namespace Game1
         public int forcePowerful = 20;
         public int force = 10;
 
-        public TimeSpan stunTimer = TimeSpan.FromMilliseconds(0/*1250*/);
+        public TimeSpan stunTimer = TimeSpan.FromMilliseconds(1250);
         TimeSpan stunElapsedTimer = TimeSpan.Zero;
         //make the attack cooldown timer longer than the stun timer
         public float Velocity { get; set; }
@@ -58,7 +58,7 @@ namespace Game1
         public int health = 200;
 
         public bool isFlipped = false;
-        TimeSpan reduceHealthTime = TimeSpan.FromMilliseconds(200);
+        TimeSpan reduceHealthTime = TimeSpan.FromMilliseconds(50);
         TimeSpan hitTimer = TimeSpan.Zero;
 
 
@@ -222,7 +222,7 @@ namespace Game1
         }
         public void Update(GameTime gameTime, KeyboardState ks, KeyboardState lastKs, GraphicsDevice graphics, bool flip)
         {
-            getHit = false;
+            //getHit = false;
             if (getHit == true)
             {
                 stun(gameTime);
@@ -231,7 +231,7 @@ namespace Game1
                 {
                     if (isPowerfulEnemy == 1)
                     {
-                        health -= 50;
+                        health -= 30;
                         moveback(gameTime, true);
                     }
                     if (isPowerfulEnemy == 0)
@@ -263,7 +263,7 @@ namespace Game1
 
 
 
-                //dead = true;
+                dead = true;
 
                 //trying to make the body go down to the ground when it dies and then float up off the screen
                 deathTimer += gameTime.ElapsedGameTime;
@@ -285,7 +285,7 @@ namespace Game1
             {
                 isFlipped = true;
             }
-            if (!stunBool)
+            if (!stunBool && !dead)
             {
                 //JUMPING:
                 if (ks.IsKeyDown(Keys.W) && lastKs.IsKeyUp(Keys.W) && !jumping)
@@ -489,17 +489,20 @@ namespace Game1
             }
 
         }
+
         public void stun(GameTime gameTime)
         {
+            
             ChangeState(characterState.Idle);
+            
             stunBool = true;
-
+         
         }
 
 
         public void ChangeState(characterState state)
         {
-            if (!stunBool && !dead)
+            if (!stunBool/* && !dead*/)
             {
                 if (state != currentState)
                 {

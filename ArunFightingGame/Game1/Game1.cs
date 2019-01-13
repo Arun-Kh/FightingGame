@@ -152,6 +152,7 @@ namespace Game1
                 }
 
                 Enemy1.Update(gameTime, Character1.currentPositon, Character1.dead);
+                
 
             }
 
@@ -204,10 +205,10 @@ namespace Game1
 
             }
 
-            //if (Enemy1.currentState == Character.characterState.Death)
-            //{
-            //    Enemy1.dead = true;
-            //}
+            if (Enemy1.currentState == Character.characterState.Death)
+            {
+                Enemy1.dead = true;
+            }
 
             //if (Enemy1.dead)
             //{
@@ -272,7 +273,12 @@ namespace Game1
 
             spriteBatch.DrawString(font, (Character1.hitbox.Intersects(Enemy1.hitbox)).ToString(), Vector2.Zero, Color.Yellow);
 
-            spriteBatch.DrawString(font, Enemy1.getHit.ToString(), new Vector2(100, 0), Color.Teal);
+            spriteBatch.DrawString(font, Enemy1.getHit.ToString(), new Vector2(100, 0), Color.Teal); //always true
+
+            spriteBatch.DrawString(font, Character1.getHit.ToString(), new Vector2(170, 0), Color.OrangeRed); //not always true
+
+
+            //spriteBatch.DrawString(font, Enemy1.getsHit.)
 
             spriteBatch.DrawString(font, Character1.getHit.ToString(), new Vector2(0, 50), Color.LimeGreen);
 
