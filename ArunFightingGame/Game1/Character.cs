@@ -55,14 +55,15 @@ namespace Game1
         float jumpspeed = 0;
         float initialjumpspeed = 15f;
         bool jumping = false;
-        public int health = 200;
+        public int health = 200; // controls health for both character and enemy 
+        //try making giving seperate health to both and make it a survival game
 
         public bool isFlipped = false;
         TimeSpan reduceHealthTime = TimeSpan.FromMilliseconds(50);
         TimeSpan hitTimer = TimeSpan.Zero;
 
 
-        TimeSpan deathTime = TimeSpan.FromMilliseconds(3000);
+        TimeSpan deathTime = TimeSpan.FromMilliseconds(6000);
         TimeSpan deathTimer = TimeSpan.Zero;
 
         public bool getHit = false;
@@ -112,7 +113,6 @@ namespace Game1
             {
                 string[] part = line.Split(';');
                 Frame frame = new Frame((new Rectangle(int.Parse(part[2]), int.Parse(part[3]), int.Parse(part[4]), int.Parse(part[5]))), new Vector2(0, 0)/*(int.Parse(part[8]),int.Parse(part[9]))*/, TimeSpan.FromMilliseconds(60));
-
                 if (part[0].Contains("Idle"))
                 {
                     idleFrames.Add(frame);
@@ -169,7 +169,7 @@ namespace Game1
                 if (part[0].Contains("Death") || part[0].Contains("FreezeDeath"))
                 {
                     deathFrames.Add(frame);
-                    frame.Length = TimeSpan.FromMilliseconds(100);
+                    frame.Length = TimeSpan.FromMilliseconds(200);
 
                     //if (part[1].Contains("frame52"))
                     //{
@@ -214,15 +214,34 @@ namespace Game1
             animations.Add(state, frameList/*List<Frame> frames*/);
         }
 
-        public void die()
+        public void die(GameTime gameTime)
         {
-            currentAnimation.Y--;
+            stunBool = false;
+
+            ChangeState(characterState.Death);
+
+            currentAnimation.LastFreezeFrame();
+
+            dead = true;
+
+            deathTimer += gameTime.ElapsedGameTime;
+            if (deathTimer > deathTime)
+            {
+
+            currentAnimation.Y-= 1;
             currentAnimation.Tint = new Color(currentAnimation.Tint.R - 1, currentAnimation.Tint.G - 1, currentAnimation.Tint.B - 1);
 
+            }
+            else
+            {
+                if (currentAnimation.Y <= 403)
+                {
+                    currentAnimation.Y += .78f;
+                }
+            }
         }
         public void Update(GameTime gameTime, KeyboardState ks, KeyboardState lastKs, GraphicsDevice graphics, bool flip)
         {
-            //getHit = false;
             if (getHit == true)
             {
                 stun(gameTime);
@@ -244,7 +263,7 @@ namespace Game1
                     hitTimer = TimeSpan.Zero;
                 }
             }
-
+            
             if (health < 0)
             {
                 health = 0;
@@ -254,28 +273,32 @@ namespace Game1
             {
                 Speed = 0;
             }
-            //DYING:
-            if (health <= 0)
+            if(health <= 0)
             {
-                ChangeState(characterState.Death);
-
-                currentAnimation.LastFreezeFrame();
-
-
-
-                dead = true;
-
-                //trying to make the body go down to the ground when it dies and then float up off the screen
-                deathTimer += gameTime.ElapsedGameTime;
-                if (deathTimer > deathTime)
-                {
-
-                    die();
-
-                }
-
-
+                die(gameTime);
             }
+            //DYING:
+            //if (health <= 0)
+            //{
+            //    ChangeState(characterState.Death);
+
+            //    currentAnimation.LastFreezeFrame();
+
+
+
+            //    dead = true;
+
+            //    //trying to make the body go down to the ground when it dies and then float up off the screen
+            //    deathTimer += gameTime.ElapsedGameTime;
+            //    if (deathTimer > deathTime)
+            //    {
+
+            //        die();
+
+            //    }
+
+
+            //}
 
             if (flip)
             {

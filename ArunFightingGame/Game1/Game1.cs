@@ -250,8 +250,8 @@ namespace Game1
             spriteBatch.Begin();
             if (playing)
             {
-                Character1.Draw(spriteBatch, pixel);
-                Enemy1.Draw(spriteBatch, pixel);
+                Character1.Draw(spriteBatch/*, pixel*/);
+                Enemy1.Draw(spriteBatch/*, pixel*/);
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     enemies[i].Draw(spriteBatch);
@@ -273,15 +273,15 @@ namespace Game1
 
             spriteBatch.DrawString(font, (Character1.hitbox.Intersects(Enemy1.hitbox)).ToString(), Vector2.Zero, Color.Yellow);
 
-            spriteBatch.DrawString(font, Enemy1.getHit.ToString(), new Vector2(100, 0), Color.Teal); //always true
+            spriteBatch.DrawString(font, Enemy1.getHit.ToString(), new Vector2(100, 0), Color.Teal); 
 
-            spriteBatch.DrawString(font, Character1.getHit.ToString(), new Vector2(170, 0), Color.OrangeRed); //not always true
-
-
-            //spriteBatch.DrawString(font, Enemy1.getsHit.)
+            spriteBatch.DrawString(font, Character1.getHit.ToString(), new Vector2(170, 0), Color.OrangeRed); 
 
             spriteBatch.DrawString(font, Character1.getHit.ToString(), new Vector2(0, 50), Color.LimeGreen);
 
+            spriteBatch.DrawString(font, Enemy1.currentState.ToString(), new Vector2(0, 100), Color.HotPink);
+
+            spriteBatch.DrawString(font, Character1.currentState.ToString(), new Vector2(0, 150), Color.PowderBlue);
 
 
             //    idle.Draw(spriteBatch);            

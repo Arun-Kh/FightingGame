@@ -69,15 +69,16 @@ namespace Game1
         {
             if (health <= 0)
             {
-                ChangeState(characterState.Death);
-                currentAnimation.LastFreezeFrame();
-                //stunBool = true;                    stun(gameTime);
-                dead = true;
-                enemyDeathTimer += gameTime.ElapsedGameTime;
-                if (enemyDeathTimer > enemyDeathTime)
-                {
-                    die();
-                }
+                die(gameTime);
+                //ChangeState(characterState.Death);
+                //currentAnimation.LastFreezeFrame();
+                ////stunBool = true;                    stun(gameTime);
+                //dead = true;
+                //enemyDeathTimer += gameTime.ElapsedGameTime;
+                //if (enemyDeathTimer > enemyDeathTime)
+                //{
+                //    die();
+                //}
               //  enemyDeathTimer = TimeSpan.Zero;
             }
             if (!dead)
@@ -224,6 +225,17 @@ namespace Game1
             currentAnimation.Update(gameTime);
 
         }
+
+        public void respawn()
+        {
+            //add a respawn animation effect
+            ChangeState(characterState.Idle);
+            currentPositon = new Vector2(100, 350);
+            health = 200; //make a default health int
+            dead = false;
+
+        }
+
 
         //public void getsHit(GameTime gameTime)
         //{
