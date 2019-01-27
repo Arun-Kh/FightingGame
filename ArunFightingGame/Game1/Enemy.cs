@@ -11,8 +11,8 @@ namespace Game1
     public class Enemy : Character
     {
         //Animation currentanimation;
-        public Enemy(Texture2D image, Vector2 position, Color tint)
-            : base(image, position, tint)
+        public Enemy(Texture2D image, Vector2 position, Color tint, Rectangle screen)
+            : base(image, position, tint, screen)
         {
 
 
@@ -41,27 +41,27 @@ namespace Game1
         {
             if (!characterDead)
             {
-                Random rand = new Random();
-                if (rand.Next(1, 5) == 1)
-                {
-                    ChangeState(characterState.Kick1);
-                }
-                else if (rand.Next(1, 5) == 2)
-                {
-                    ChangeState(characterState.Kick2);
-                }
-                else if (rand.Next(1, 5) == 3)
-                {
-                    ChangeState(characterState.Kick3);
-                }
-                else if (rand.Next(1, 5) == 4)
-                {
-                    ChangeState(characterState.Punch1);
-                }
-                else if (rand.Next(1, 5) == 5)
-                {
-                    ChangeState(characterState.Punch2);
-                }
+                //Random rand = new Random();
+                //if (rand.Next(1, 5) == 1)
+                //{
+                //    ChangeState(characterState.Kick1);
+                //}
+                //else if (rand.Next(1, 5) == 2)
+                //{
+                //    ChangeState(characterState.Kick2);
+                //}
+                //else if (rand.Next(1, 5) == 3)
+                //{
+                //    ChangeState(characterState.Kick3);
+                //}
+                //else if (rand.Next(1, 5) == 4)
+                //{
+                //    ChangeState(characterState.Punch1);
+                //}
+                //else if (rand.Next(1, 5) == 5)
+                //{
+                //    ChangeState(characterState.Punch2);
+                //}
 
             }
         }
@@ -130,7 +130,7 @@ namespace Game1
                 //}
                 if (!stunBool && !characterDead)
                 {
-                    if (currentAnimation.X + 50 < CharacterPostion.X)
+                    if (currentAnimation.X + 50 < CharacterPostion.X && !isCollidingRight)
                     {
                         ChangeState(characterState.Run);
                         if (currentState == characterState.Run)
@@ -149,7 +149,7 @@ namespace Game1
                         Velocity = Speed;
 
                     }
-                    if (currentAnimation.X - 50 > CharacterPostion.X)
+                    if (currentAnimation.X - 50 > CharacterPostion.X && !isCollidingLeft)
                     {
                         ChangeState(characterState.Run);
                         if (currentState == characterState.Run)

@@ -22,7 +22,7 @@ namespace Game1
         //        this.Length = Length;
         //    }
         //}
-
+        Rectangle screenHitBox;
         public Rectangle hitbox = new Rectangle(0, 0, 0, 0);
         protected Animation currentAnimation;
 
@@ -55,6 +55,8 @@ namespace Game1
         float jumpspeed = 0;
         float initialjumpspeed = 15f;
         bool jumping = false;
+        public bool isCollidingLeft = false;
+        public bool isCollidingRight= false;
         public int health = 200; // controls health for both character and enemy 
         //try making giving seperate health to both and make it a survival game
 
@@ -91,11 +93,11 @@ namespace Game1
 
 
 
-        public Character(Texture2D Image, Vector2 Position, Color Tint)
+        public Character(Texture2D Image, Vector2 Position, Color Tint, Rectangle screen)
 
         {
 
-
+            screenHitBox = screen;
             animations = new Dictionary<characterState, List<Frame>>();
 
             List<Frame> idleFrames = new List<Frame>();
@@ -350,9 +352,9 @@ namespace Game1
             //WALKIKNG:
             if (!stunBool)
             {
-                if (ks.IsKeyDown(Keys.A))
+                if (ks.IsKeyDown(Keys.A) && !isCollidingLeft)
                 {
-                    if (!jumping && !stunBool)
+                    if (!jumping && !stunBool )
                     {
                         ChangeState(characterState.Run);
                     }
@@ -361,7 +363,7 @@ namespace Game1
                     isFlipped = true;
                 }
 
-                if (ks.IsKeyDown(Keys.D) /*|| ks.IsKeyDown(Keys.A)*/)
+                if (ks.IsKeyDown(Keys.D) && !isCollidingRight /*|| ks.IsKeyDown(Keys.A)*/)
                 {
                     if (!jumping && !stunBool)
                     {
@@ -429,30 +431,23 @@ namespace Game1
                 //currentAnimation.Origin = Vector2.Zero;
             }
 
+            if (currentAnimation.X <= 0 || (currentAnimation.X + currentAnimation.Image.Width) >= screenHitBox.Width)
+            {
+                Velocity = 0.1f;
+            }
+
             currentAnimation.X += Velocity;
             Velocity -= (Velocity * Friction);
             currentPositon = new Vector2(currentAnimation.X, currentAnimation.Y);
+
+           
 
             hitbox.X = (int)currentAnimation.X;
             hitbox.Y = (int)currentAnimation.Y;
             hitbox.Width = (int)currentAnimation.SourceRectangle.Value.Width;
             hitbox.Height = (int)currentAnimation.SourceRectangle.Value.Height;
 
-            //if (currentState == characterState.Punch1 || currentState == characterState.Punch2)
-            //{
-            //    isAttackingPowerful = true;
-            //    isAttackingWeak = false;
-            //}
-            //if (currentState == characterState.Kick1 || currentState == characterState.Kick2 || currentState == characterState.Kick3)
-            //{
-            //    isAttackingWeak = true;
-            //    isAttackingPowerful = false;
-            //}
-            //if (!(currentState == characterState.Punch1) || !(currentState == characterState.Punch2) || !(currentState == characterState.Kick1) || !(currentState == characterState.Kick2) || !(currentState == characterState.Kick3))
-            //{
-            //    isAttackingPowerful = false;
-            //    isAttackingWeak = false;
-            //}
+     
 
 
             stunElapsedTimer += gameTime.ElapsedGameTime;

@@ -32,6 +32,9 @@ namespace Game1
     //make the characters not go off the screen
     //fix the level system
 
+
+        //create boundries for the character and fix issues with that
+
     //newest version 10/28/18
 
     //Get a real background
@@ -102,9 +105,9 @@ namespace Game1
             // Create a new SpriteBatch, which can be used to draw textures.
             sheet = Content.Load<Texture2D>("fighter");
 
-            Character1 = new Character(sheet, new Vector2(350, 350), Color.White);
+            Character1 = new Character(sheet, new Vector2(350, 350), Color.White, GraphicsDevice.Viewport.Bounds);
 
-            Enemy1 = new Enemy(sheet, new Vector2(100, 350), Color.Red);
+            Enemy1 = new Enemy(sheet, new Vector2(100, 350), Color.Red, GraphicsDevice.Viewport.Bounds);
 
             font = Content.Load<SpriteFont>("font");
 
@@ -118,8 +121,10 @@ namespace Game1
 
             LoseLabel = new Label("You Lose!", new Vector2(350, 200), Color.LightYellow, font);
 
-            //       enemies.Add(new Enemy(sheet, new Vector2(90, 350), Color.Red));
-
+            for (int i = 0; i < 10; i++)
+            {
+              //  enemies.Add(new Enemy(sheet, new Vector2(90 + (rand.Next(10,300)), 350), Color.Red));
+            }
 
 
 
@@ -155,11 +160,66 @@ namespace Game1
                 
 
             }
-
+            if (!(Character1.hitbox.Intersects(Enemy1.hitbox)))
+            {
+                
+                Character1.isCollidingLeft = false;
+                Character1.isCollidingRight = false;
+                Enemy1.isCollidingLeft = false;
+                Enemy1.isCollidingRight = false;
+                for(int i = 0; i < enemies.Count; i++)
+                {
+                    enemies[i].isCollidingLeft = false;
+                    enemies[i].isCollidingRight = false;
+                }
+            }
+            for(int i = 0; i < enemies.Count; i++)
+            {
+                for(int f = 0; i < enemies.Count; f++)
+                {
+                    if(i == f)
+                    {
+                        f++;
+                    }
+                    if(enemies[i].hitbox.Intersects(enemies[f].hitbox))
+                    {
+                        if(enemies[i].isFlipped)
+                        {
+                            enemies[i].isCollidingLeft = true;
+                        }
+                        else
+                        {
+                            enemies[i].isCollidingRight = true;
+                        }
+                    }
+                    if (!(enemies[i].hitbox.Intersects(enemies[f].hitbox)))
+                    {
+                        enemies[i].isCollidingLeft = false;
+                        enemies[i].isCollidingRight = false; 
+                    }
+                }
+            }
             if (Character1.hitbox.Intersects(Enemy1.hitbox))
             {
                 //add health info here
-
+                ////add collision here
+              
+                if(Character1.isFlipped)
+                {
+                    Character1.isCollidingLeft = true;
+                }
+                else if(!Character1.isFlipped)
+                {
+                    Character1.isCollidingRight = true;
+                }
+                if (Enemy1.isFlipped)
+                {
+                    Enemy1.isCollidingLeft = true;
+                }
+                else if (!Enemy1.isFlipped)
+                {
+                    Enemy1.isCollidingRight = true;
+                }
                 if (Character1.currentState == Character.characterState.Kick1 || Character1.currentState == Character.characterState.Kick2 || Character1.currentState == Character.characterState.Kick3)
                 {
                     Enemy1.getsHit(gameTime, true);
