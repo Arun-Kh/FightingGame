@@ -230,9 +230,10 @@ namespace Game1
         {
             //add a respawn animation effect
             ChangeState(characterState.Idle);
-            currentPositon = new Vector2(100, 350);
+            currentPositon = new Vector2(100, 350); //make a default position 
             health = 200; //make a default health int
             dead = false;
+            currentAnimation.Tint = Color.Red; //make a default color 
 
         }
 

@@ -348,7 +348,19 @@ namespace Game1
 
                 }
             }
-
+            //if(currentAnimation.X >= (graphics.Viewport.Width - currentAnimation.Image.Width))
+            //{
+            //    isCollidingRight = true;
+            //}
+            //else if(currentAnimation.X <= 0)
+            //{
+            //    isCollidingLeft = true;
+            //}
+            //else
+            //{
+            //    isCollidingLeft = false;
+            //    isCollidingRight = false; 
+            //}
             //WALKIKNG:
             if (!stunBool)
             {
@@ -431,9 +443,10 @@ namespace Game1
                 //currentAnimation.Origin = Vector2.Zero;
             }
 
-            if (currentAnimation.X <= 0 || (currentAnimation.X + currentAnimation.Image.Width) >= screenHitBox.Width)
+            if (currentAnimation.X <= 0 /*|| (currentAnimation.X + currentAnimation.SourceRectangle.Value.Width) >= screenHitBox.Width*/)
+                //fix this so that there are boundries on both sides
             {
-                Velocity = 0.1f;
+                 Velocity = 0.1f;
             }
 
             currentAnimation.X += Velocity;
