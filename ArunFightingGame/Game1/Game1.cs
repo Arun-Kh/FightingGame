@@ -30,10 +30,12 @@ namespace Game1
     //fix the die (make the body go onto the ground when it dies and then float up off the screen or fade away)
     //fix the issue where the enemy's health doesn't go down
     //make the characters not go off the screen
-    //fix the level system
     //change the font
 
-        //create boundries for the character and fix issues with thatS
+        //fix the collision between character and enemy - and between several enemies - set 'isCollidingLeft' and 'isCollidingRight' to false
+        //add several enemies
+
+    //create boundries for the character and fix issues with thatS
 
     //newest version 10/28/18
 
@@ -74,7 +76,7 @@ namespace Game1
 
         TimeSpan levelUpTimer = TimeSpan.Zero;
 
-        TimeSpan levelUpTime = TimeSpan.FromMilliseconds(10000);
+        TimeSpan levelUpTime = TimeSpan.FromMilliseconds(15000);
 
         Character Character1;
 
@@ -107,7 +109,7 @@ namespace Game1
 
             Character1 = new Character(sheet, new Vector2(350, 350), Color.White, GraphicsDevice.Viewport.Bounds);
 
-            Enemy1 = new Enemy(sheet, new Vector2(100, 350), Color.Red, GraphicsDevice.Viewport.Bounds);
+            //Enemy1 = new Enemy(sheet, new Vector2(100, 350), Color.Red, GraphicsDevice.Viewport.Bounds);
 
             font = Content.Load<SpriteFont>("font");
 
@@ -121,10 +123,12 @@ namespace Game1
 
             LoseLabel = new Label("You Lose!", new Vector2(350, 200), Color.LightYellow, font);
 
-            for (int i = 0; i < 10; i++)
-            {
-            //    enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10,300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
-            }
+            enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+            //}
 
 
 
@@ -156,31 +160,34 @@ namespace Game1
                     enemies[i].Update(gameTime, Character1.currentPositon, Character1.dead);
                 }
 
-                Enemy1.Update(gameTime, Character1.currentPositon, Character1.dead);
+             //   Enemy1.Update(gameTime, Character1.currentPositon, Character1.dead);
                 
 
             }
-            if (!(Character1.hitbox.Intersects(Enemy1.hitbox)))
+            for (int i = 0; i < enemies.Count; i++)
             {
-                Character1.isCollidingLeft = false;
-                Character1.isCollidingRight = false;
-                Enemy1.isCollidingLeft = false;
-                Enemy1.isCollidingRight = false;
-                for(int i = 0; i < enemies.Count; i++)
+                if (!(Character1.hitbox.Intersects(enemies[i].hitbox)))
                 {
-                    enemies[i].isCollidingLeft = false;
-                    enemies[i].isCollidingRight = false;
+                    Character1.isCollidingLeft = false;
+                    Character1.isCollidingRight = false;
+              //      Enemy1.isCollidingLeft = false;
+                //    Enemy1.isCollidingRight = false;
+                    
+                    
+                        enemies[i].isCollidingLeft = false;
+                        enemies[i].isCollidingRight = false;
+                    
                 }
             }
-            //for(int i = 0; i < enemies.Count; i++)
+            //for (int i = 0; i < enemies.Count; i++)
             //{
-            //    for(int f = 0; i < enemies.Count; f++)
+            //    for (int f = 0; i < enemies.Count; f++)
             //    {
-            //        //if(i == f)
-            //        //{
-            //        //    f++;
-            //        //}
-            //        if (!(i == f))
+            //        if (i == f)
+            //        {
+            //           f++;
+            //        }
+            //        else if (!(i == f))
             //        {
             //            if (enemies[i].hitbox.Intersects(enemies[f].hitbox))
             //            {
@@ -201,107 +208,88 @@ namespace Game1
             //        }
             //    }
             //}
-            if (Character1.hitbox.Intersects(Enemy1.hitbox))
+            for (int i = 0; i < enemies.Count; i++)
             {
-                //add health info here
-                ////add collision here
-              
-                if(Character1.isFlipped)
+                if (Character1.hitbox.Intersects(enemies[i].hitbox))
                 {
-                    Character1.isCollidingLeft = true;
-                }
-                else if(!Character1.isFlipped)
-                {
-                    Character1.isCollidingRight = true;
-                }
-                if (Enemy1.isFlipped)
-                {
-                    Enemy1.isCollidingLeft = true;
-                }
-                else if (!Enemy1.isFlipped)
-                {
-                    Enemy1.isCollidingRight = true;
-                }
-                if (Character1.currentState == Character.characterState.Kick1 || Character1.currentState == Character.characterState.Kick2 || Character1.currentState == Character.characterState.Kick3)
-                {
-                    Enemy1.getsHit(gameTime, true);
-                    //Enemy1.health -= 100;
-                    ////subtract a lot of health from enemy
-                    //Enemy1.RealEnemyhealth -= 10;
-                    //Enemy1.stun(gameTime);
-                    //Enemy1.moveback(true);
-                    //Enemy1.getHit(true);
-                }
-                if ((Character1.currentState == Character.characterState.Punch1) || (Character1.currentState == Character.characterState.Punch2))
-                {
-                    Enemy1.getsHit(gameTime, false);
-                    //Enemy1.health -= 100;
-                    //Enemy1.stun(gameTime);
-                    //Enemy1.moveback(false);
-                    // Enemy1.getHit(false);
-                    //subtract a little of health from enemy
-                }
+                    //add health info here
+                    ////add collision here
 
-                if (Enemy1.currentState == Character.characterState.Kick1 || Enemy1.currentState == Character.characterState.Kick2 || Enemy1.currentState == Character.characterState.Kick3)
-                {
-                    Character1.getsHit(gameTime, true);
-                    //Character1.health -= 100;
-                    //Character1.stun(gameTime);
-                    //Character1.moveback(true);
-                    //Character1.health -= 10;
-                    //subtract a lot of health from character
-                    //Character1.getHit(true);
-                }
-                if (Enemy1.currentState == Character.characterState.Punch1 || Enemy1.currentState == Character.characterState.Punch2)
-                {
-                    Character1.getsHit(gameTime, false);
-                    //Character1.health -= 100;
-                    //Character1.stun(gameTime);
-                    //Character1.moveback(false);
-                    //Character1.health -= 5;
-                    //subtract a little of health from character
-                    //Character1.getHit(false);
-                }
-                //Enemy1.health -= 180;
+                    if (Character1.isFlipped)
+                    {
+                        Character1.isCollidingLeft = true;
+                    }
+                    else if (!Character1.isFlipped)
+                    {
+                        Character1.isCollidingRight = true;
+                    }
+                    if (enemies[i].isFlipped)
+                    {
+                        enemies[i].isCollidingLeft = true;
+                    }
+                    else if (!enemies[i].isFlipped)
+                    {
+                        enemies[i].isCollidingRight = true;
+                    }
 
+                    if (Character1.currentState == Character.characterState.Kick1 || Character1.currentState == Character.characterState.Kick2 || Character1.currentState == Character.characterState.Kick3)
+                    {
+                        enemies[i].getsHit(gameTime, true);
 
+                    }
+                    if ((Character1.currentState == Character.characterState.Punch1) || (Character1.currentState == Character.characterState.Punch2))
+                    {
+                        enemies[i].getsHit(gameTime, false);
+
+                    }
+
+                    if (enemies[i].currentState == Character.characterState.Kick1 || enemies[i].currentState == Character.characterState.Kick2 || enemies[i].currentState == Character.characterState.Kick3)
+                    {
+                        Character1.getsHit(gameTime, true);
+
+                    }
+                    if (enemies[i].currentState == Character.characterState.Punch1 || enemies[i].currentState == Character.characterState.Punch2)
+                    {
+                        Character1.getsHit(gameTime, false);
+                    }
+                }
             }
-
-            if (Enemy1.currentState == Character.characterState.Death)
+            for (int i = 0; i < enemies.Count; i++)
             {
-                Enemy1.dead = true;
-            }
+                if (enemies[i].currentState == Character.characterState.Death)
+                {
+                    enemies[i].dead = true;
+                }
 
-            if (Enemy1.dead)
-            {
-                levelUpTimer += gameTime.ElapsedGameTime;
+                if (enemies[i].dead)
+                {
+                    levelUpTimer += gameTime.ElapsedGameTime;
+
+                    if (levelUpTimer >= levelUpTime)
+                    {
+
+                        level++;
+                        //actually make it get harder with each level
+                        enemies.RemoveAt(i);
+                        //Enemy1.health = 200;
+                        //         enemies.Add(new Enemy(sheet, new Vector2(90, 350), Color.Red));
+
+                        enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+
+                        //  Enemy1.dead = false;
+                        levelUpTimer = TimeSpan.Zero;
+                    }
+
+                }
+                if (Character1.health <= 0)
+                {
+                    enemies[i].characterDead = true;
+                }
                 
-
-
-                if (levelUpTimer >= levelUpTime)
-                {
-
-                    level++;
-                    //actually make it get harder with each level
-                    Enemy1.respawn();
-                    //Enemy1.health = 200;
-                    //         enemies.Add(new Enemy(sheet, new Vector2(90, 350), Color.Red));
-
-
-                  //  Enemy1.dead = false;
-                  levelUpTimer = TimeSpan.Zero;
-                }
-
             }
-            if (Character1.health <= 0)
-            {
-                Enemy1.characterDead = true;
-            }
-
-
             CharacterHealthLabel.text = Character1.health.ToString();
 
-            EnemyHealthLabel.text = Enemy1.health.ToString();
+            EnemyHealthLabel.text = enemies[0].health.ToString();
 
             LevelLabel.text = "LEVEL " + level.ToString();
 
@@ -317,7 +305,7 @@ namespace Game1
             if (playing)
             {
                 Character1.Draw(spriteBatch/*, pixel*/);
-                Enemy1.Draw(spriteBatch/*, pixel*/);
+               // Enemy1.Draw(spriteBatch/*, pixel*/);
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     enemies[i].Draw(spriteBatch);
@@ -337,17 +325,20 @@ namespace Game1
                 LoseLabel.draw(spriteBatch);
             }
 
-            spriteBatch.DrawString(font,"Intersect:" + (Character1.hitbox.Intersects(Enemy1.hitbox)).ToString(), Vector2.Zero, Color.Yellow);
+            //spriteBatch.DrawString(font,"Intersect:" + (Character1.hitbox.Intersects(Enemy1.hitbox)).ToString(), Vector2.Zero, Color.Yellow);
 
-            spriteBatch.DrawString(font, "Enemy GetHit: " + Enemy1.getHit.ToString(), new Vector2(150, 0), Color.Teal); 
+            //spriteBatch.DrawString(font, "Enemy GetHit: " + Enemy1.getHit.ToString(), new Vector2(150, 0), Color.Teal); 
 
-            spriteBatch.DrawString(font, "Character GetHit: " + Character1.getHit.ToString(), new Vector2(0, 50), Color.LimeGreen);
+            //spriteBatch.DrawString(font, "Character GetHit: " + Character1.getHit.ToString(), new Vector2(0, 50), Color.LimeGreen);
 
-            spriteBatch.DrawString(font,"Enemy: " + Enemy1.currentState.ToString(), new Vector2(0, 100), Color.HotPink);
+            //spriteBatch.DrawString(font,"Enemy: " + Enemy1.currentState.ToString(), new Vector2(0, 100), Color.HotPink);
 
-            spriteBatch.DrawString(font, "Character: " + Character1.currentState.ToString(), new Vector2(0, 150), Color.PowderBlue);
+            //spriteBatch.DrawString(font, "Character: " + Character1.currentState.ToString(), new Vector2(0, 150), Color.PowderBlue);
 
-         //   spriteBatch.DrawString(font, levelUpTimer.ToString(), new Vector2(420, 0), Color.DarkOrange);
+            //spriteBatch.DrawString(font, Enemy1.hitbox.ToString(), new Vector2(0, 200), Color.CadetBlue);
+
+
+            //   spriteBatch.DrawString(font, levelUpTimer.ToString(), new Vector2(420, 0), Color.DarkOrange);
 
             //spriteBatch.DrawString(font, "Enemy dead: " + Enemy1.dead.ToString(), new Vector2(500, 0), Color.DarkSalmon);
 

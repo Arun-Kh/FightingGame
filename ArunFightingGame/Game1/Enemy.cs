@@ -14,15 +14,18 @@ namespace Game1
         public Enemy(Texture2D image, Vector2 position, Color tint, Rectangle screen)
             : base(image, position, tint, screen)
         {
-
+           // defaultPos = position;
 
         }
+
+        
 
         bool flip = false;
         public new bool isAttackingWeak = false;
         public new bool isAttackingPowerful = false;
         TimeSpan attackTime = TimeSpan.FromMilliseconds(1500);
         public new float Speed { get; set; } = 2.4f;
+        public int defaultHealth = 230; //default health used after respawing
 
         TimeSpan enemyDeathTimer = TimeSpan.Zero;
         TimeSpan enemyDeathTime = TimeSpan.FromMilliseconds(150);
@@ -220,7 +223,7 @@ namespace Game1
             }
 
 
-
+          
 
             currentAnimation.Update(gameTime);
 
@@ -231,24 +234,15 @@ namespace Game1
             //add a respawn animation effect
             ChangeState(characterState.Idle);
             currentPositon = new Vector2(100, 350); //make a default position 
-            health = 200; //make a default health int
+            //currentPositon = defaultPos;
+            //health = 200; //make a default health int
+            health = defaultHealth;
             dead = false;
             currentAnimation.Tint = Color.Red; //make a default color 
 
         }
 
-
-        //public void getsHit(GameTime gameTime)
-        //{
-        //    if (gametimer >= (reduceHealthTime + gameTime.ElapsedGameTime))
-        //    {
-        //        RealEnemyhealth--;
-        //        gametimer = TimeSpan.Zero;
-        //    }
-        //}
-
-        //if 3 seconds since last hit then take off health
-
+        
 
         //Make the enemy attack the character
         //Make an attack function
