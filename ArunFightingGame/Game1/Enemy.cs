@@ -26,6 +26,8 @@ namespace Game1
         TimeSpan attackTime = TimeSpan.FromMilliseconds(1500);
         public new float Speed { get; set; } = 2.4f;
         public int defaultHealth = 230; //default health used after respawing
+        public float jumpspeed = 15f;
+
 
         TimeSpan enemyDeathTimer = TimeSpan.Zero;
         TimeSpan enemyDeathTime = TimeSpan.FromMilliseconds(150);
@@ -68,7 +70,7 @@ namespace Game1
 
             }
         }
-        public void Update(GameTime gameTime, Vector2 CharacterPostion, bool characterDead)
+        public void Update(GameTime gameTime, Vector2 CharacterPostion, bool characterDead, int graphicsHeight)
         {
             if (health <= 0)
             {
@@ -166,6 +168,45 @@ namespace Game1
                         flip = true;
                         Velocity = -Speed;
                     }
+                    if (currentAnimation.X > CharacterPostion.X + 100 || currentAnimation.X < CharacterPostion.X - 100)
+                    {
+                        jump(graphicsHeight, CharacterPostion);
+                    }
+                    //if (currentAnimation.X > CharacterPostion.X +100 || currentAnimation.X < CharacterPostion.X - 100)
+                    //{
+                    //    float initialJumpSpeed = 15f;
+                    //    float gravity = .5f;
+                    //    Vector2 initialPosition = currentPositon;
+                    //    jumpspeed = initialJumpSpeed;
+                    //    bool jumping = true;
+
+
+                    //    if (jumping)
+                    //    {
+                    //        ChangeState(characterState.Jump);
+                    //        isCollidingLeft = false;
+                    //        isCollidingRight = false;
+                    //        //jumping:
+
+                    //        jumpspeed -= gravity;
+                    //        currentAnimation.Y -= jumpspeed;
+                    //        //if(currentAnimation.)
+                    //        if (currentAnimation.FirstLoop && jumpspeed < 0)
+                    //        {
+                    //            currentAnimation.FirstFreezeFrame();
+                    //        }
+                    //        if (currentAnimation.Y + currentAnimation.SourceRectangle.Value.Height > graphicsHeight)
+                    //        {
+                    //            //hit the ground
+                    //            jumping = false;
+                    //            //set Y position to ground
+                    //            currentAnimation.Y = 350;
+                    //            ChangeState(characterState.Idle);
+
+                    //        }
+
+                    //    }
+                    //}
                 }
 
                 currentAnimation.X += Velocity;
@@ -242,7 +283,46 @@ namespace Game1
 
         }
 
-        
+        public void jump(int graphicsHeight, Vector2 CharacterPostion)
+        {
+            if (currentAnimation.X > CharacterPostion.X + 100 || currentAnimation.X < CharacterPostion.X - 100)
+            
+            {
+                float initialJumpSpeed = 15f;
+                float gravity = .5f;
+                Vector2 initialPosition = currentPositon;
+                jumpspeed = initialJumpSpeed;
+                bool jumping = true;
+
+
+                if (jumping)
+                {
+                    ChangeState(characterState.Jump);
+                    isCollidingLeft = false;
+                    isCollidingRight = false;
+                    //jumping:
+
+                    jumpspeed -= gravity;
+                    currentAnimation.Y -= jumpspeed;
+                    //if(currentAnimation.)
+                    if (currentAnimation.FirstLoop && jumpspeed < 0)
+                    {
+                        currentAnimation.FirstFreezeFrame();
+                    }
+                    if (currentAnimation.Y + currentAnimation.SourceRectangle.Value.Height > graphicsHeight)
+                    {
+                        //hit the ground
+                        jumping = false;
+                        //set Y position to ground
+                        currentAnimation.Y = 350;
+                        ChangeState(characterState.Idle);
+
+                    }
+
+                }
+            }
+        }
+
 
         //Make the enemy attack the character
         //Make an attack function

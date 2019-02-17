@@ -327,7 +327,8 @@ namespace Game1
                 if (jumping)
                 {
                     ChangeState(characterState.Jump);
-
+                    isCollidingLeft = false;
+                    isCollidingRight = false;
                     //jumping:
 
                     jumpspeed -= gravity;
