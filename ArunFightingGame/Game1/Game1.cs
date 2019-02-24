@@ -37,7 +37,6 @@ namespace Game1
 
     //create boundries for the character and fix issues with thatS
 
-    //newest version 10/28/18
 
     //Get a real background
     //Everything Else
@@ -158,7 +157,7 @@ namespace Game1
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     enemies[i].Update(gameTime, Character1.currentPositon, Character1.dead, GraphicsDevice.Viewport.Height);
-                    enemies[i].jump(GraphicsDevice.Viewport.Height, Character1.currentPositon);
+                //    enemies[i].jump(GraphicsDevice.Viewport.Height, Character1.currentPositon);
 
                 }
 
@@ -341,7 +340,9 @@ namespace Game1
                 {
                     enemies[i].Draw(spriteBatch, pixel);
                     spriteBatch.DrawString(font, enemies[i].jumpspeed.ToString(), new Vector2(0, 100), Color.Fuchsia);
-
+                    spriteBatch.DrawString(font, enemies[i].jumping.ToString(), new Vector2(0, 150), Color.LightGoldenrodYellow);
+                    spriteBatch.DrawString(font, enemies[i].currentState.ToString(), new Vector2(0, 200), Color.MediumAquamarine);
+                    
                 }
 
                 CharacterHealthLabel.draw(spriteBatch);
