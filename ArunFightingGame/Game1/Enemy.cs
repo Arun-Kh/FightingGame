@@ -158,41 +158,43 @@ namespace Game1
                         //Vector2 initialPosition = currentPositon;
                         jumping = true;
                     }
-                    if (jumping)
-                    {
-                        Vector2 initialPosition = currentPositon;
+                    //if (jumping)
+                    //{
+                    //    Vector2 initialPosition = currentPositon;
 
-                        ChangeState(characterState.Jump);
-                        isCollidingLeft = false;
-                        isCollidingRight = false;
-                        //jumping:
+                    //    ChangeState(characterState.Jump);
+                    //    isCollidingLeft = false;
+                    //    isCollidingRight = false;
+                    //    //jumping:
 
-                        jumpspeed -= gravity;
-                        currentAnimation.Y -= jumpspeed;
-                        if (!flip)
-                        {
-                            Velocity = -Speed;
+                    //    jumpSpeed -= gravity;
+                    //    currentAnimation.Y -= jumpSpeed;
+                    //    if (!flip)
+                    //    {
+                    //        //  Velocity = -Speed;
+                    //        currentAnimation.X -= Speed;
                         
-                        }
-                        else
-                        {
-                            Velocity = Speed;    
-                        }
+                    //    }
+                    //    else
+                    //    {
+                    //        // Velocity = Speed;    
+                    //        currentAnimation.X += Speed;
+                    //    }
                         
-                        if (currentAnimation.FirstLoop && jumpspeed < 0)
-                        {
-                           currentAnimation.FirstFreezeFrame();
-                        }
-                        if (currentAnimation.Y + currentAnimation.SourceRectangle.Value.Height > graphicsHeight)
-                        {
-                            //hit the ground
-                            jumping = false;
-                            //set Y position to ground
-                            currentAnimation.Y = 350;//initialPosition.Y;
-                            jumpspeed = initialJumpSpeed;
-                            ChangeState(characterState.Idle);
-                        }
-                    }
+                    //    if (currentAnimation.FirstLoop && jumpSpeed < 0)
+                    //    {
+                    //       currentAnimation.FirstFreezeFrame();
+                    //    }
+                    //    if (currentAnimation.Y + currentAnimation.SourceRectangle.Value.Height > graphicsHeight)
+                    //    {
+                    //        //hit the ground
+                    //        jumping = false;
+                    //        //set Y position to ground
+                    //        currentAnimation.Y = 350;//initialPosition.Y;
+                    //        jumpSpeed = initialJumpSpeed;
+                    //        ChangeState(characterState.Idle);
+                    //    }
+                    //}
                 }
                 
          
@@ -243,14 +245,48 @@ namespace Game1
                 gametimer += gameTime.ElapsedGameTime;
                 if (gametimer >= stunTimer)
                 {
-
-
                     stunBool = false;
                     gametimer = TimeSpan.Zero;
 
                 }
             }
+            if (jumping)
+            {
+                Vector2 initialPosition = currentPositon;
 
+                ChangeState(characterState.Jump);
+                isCollidingLeft = false;
+                isCollidingRight = false;
+                //jumping:
+
+                jumpspeed -= gravity;
+                currentAnimation.Y -= jumpspeed;
+                if (!flip)
+                {
+                    //  Velocity = -Speed;
+                    currentAnimation.X -= Speed;
+
+                }
+                else
+                {
+                    // Velocity = Speed;    
+                    currentAnimation.X += Speed;
+                }
+
+                if (currentAnimation.FirstLoop && jumpspeed < 0)
+                {
+                    currentAnimation.FirstFreezeFrame();
+                }
+                if (currentAnimation.Y + currentAnimation.SourceRectangle.Value.Height > graphicsHeight)
+                {
+                    //hit the ground
+                    jumping = false;
+                    //set Y position to ground
+                    currentAnimation.Y = 350;//initialPosition.Y;
+                    jumpspeed = initialJumpSpeed;
+                    ChangeState(characterState.Idle);
+                }
+            }
 
 
 
@@ -279,7 +315,7 @@ namespace Game1
         //        float initialJumpSpeed = 15f;
         //        float gravity = .5f;
         //        Vector2 initialPosition = currentPositon;
-        //        jumpspeed = initialJumpSpeed;
+        //        jumpSpeed = initialJumpSpeed;
         //        bool jumping = true;
 
 
@@ -290,10 +326,10 @@ namespace Game1
         //            isCollidingRight = false;
         //            //jumping:
 
-        //            jumpspeed -= gravity;
-        //            currentAnimation.Y -= jumpspeed;
+        //            jumpSpeed -= gravity;
+        //            currentAnimation.Y -= jumpSpeed;
         //            //if(currentAnimation.)
-        //            if (currentAnimation.FirstLoop && jumpspeed < 0)
+        //            if (currentAnimation.FirstLoop && jumpSpeed < 0)
         //            {
         //                currentAnimation.FirstFreezeFrame();
         //            }

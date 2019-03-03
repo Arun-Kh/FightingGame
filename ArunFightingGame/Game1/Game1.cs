@@ -285,12 +285,13 @@ namespace Game1
             }
             for (int i = 0; i < enemies.Count; i++)
             {
+                int deadEnemies = 0;
                 if (enemies[i].currentState == Character.characterState.Death)
                 {
                     enemies[i].dead = true;
+                    deadEnemies++;
                 }
-
-                if (enemies[i].dead)
+                if (deadEnemies >= enemies.Count/*enemies[i].dead*/)
                 {
                     levelUpTimer += gameTime.ElapsedGameTime;
 
@@ -300,11 +301,16 @@ namespace Game1
                         level++;
                         //actually make it get harder with each level
                         enemies.RemoveAt(i);
+                        
                         //Enemy1.health = 200;
                         //         enemies.Add(new Enemy(sheet, new Vector2(90, 350), Color.Red));
 
                         enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
-
+                        if(level >= 3)
+                        {
+                            enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                        }
+                        deadEnemies = 0;
                         //  Enemy1.dead = false;
                         levelUpTimer = TimeSpan.Zero;
                     }
