@@ -32,8 +32,8 @@ namespace Game1
     //make the characters not go off the screen
     //change the font
 
-        //fix the collision between character and enemy - and between several enemies - set 'isCollidingLeft' and 'isCollidingRight' to false
-        //add several enemies
+    //fix the collision between character and enemy - and between several enemies - set 'isCollidingLeft' and 'isCollidingRight' to false
+    //add several enemies
 
     //create boundries for the character and fix issues with thatS
 
@@ -157,7 +157,7 @@ namespace Game1
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     enemies[i].Update(gameTime, Character1.currentPositon, Character1.dead, GraphicsDevice.Viewport.Height);
-                //    enemies[i].jump(GraphicsDevice.Viewport.Height, Character1.currentPositon);
+                    //    enemies[i].jump(GraphicsDevice.Viewport.Height, Character1.currentPositon);
 
                 }
 
@@ -171,54 +171,63 @@ namespace Game1
                 {
                     Character1.isCollidingLeft = false;
                     Character1.isCollidingRight = false;
-              //      Enemy1.isCollidingLeft = false;
-                //    Enemy1.isCollidingRight = false;
-                    
-                    
-                        enemies[i].isCollidingLeft = false;
-                        enemies[i].isCollidingRight = false;
-                    
+                    //      Enemy1.isCollidingLeft = false;
+                    //    Enemy1.isCollidingRight = false;
+
+
+                    enemies[i].isCollidingLeft = false;
+                    enemies[i].isCollidingRight = false;
+
                 }
             }
-            //for (int i = 0; i < enemies.Count; i++)
-            //{
-            //    for (int f = 0; i < enemies.Count; f++)
-            //    {
-            //        if (i == f)
-            //        {
-            //           f++;
-            //        }
-            //        else if (!(i == f))
-            //        {
-            //            if (enemies[i].hitbox.Intersects(enemies[f].hitbox))
-            //            {
-            //                if (enemies[i].isFlipped)
-            //                {
-            //                    enemies[i].isCollidingLeft = true;
-            //                }
-            //                else
-            //                {
-            //                    enemies[i].isCollidingRight = true;
-            //                }
-            //            }
-            //            else if (!(enemies[i].hitbox.Intersects(enemies[f].hitbox)))
-            //            {
-            //                enemies[i].isCollidingLeft = false;
-            //                enemies[i].isCollidingRight = false;
-            //            }
-            //        }
-            //    }
-            //}
+            for (int i = 0; i < enemies.Count - 1; i++)
+            {
+                for (int f = 0; f < enemies.Count - 1; f++)
+                {
+                    
+                    //if (i == f)
+                    //{
+                    //    if (!(f == enemies.Count - 1))
+                    //    {
+                    //        f++;
+                    //    }
+                    //    else
+                    //    {
+                    //        f = 0;
+                    //    }
+                    //}
+
+                    /*else*/ if (!(i == f))
+                    {
+                        if (enemies[i].hitbox.Intersects(enemies[f].hitbox))
+                        {
+                            if (enemies[i].isFlipped)
+                            {
+                                enemies[i].isCollidingLeft = true; 
+                            }
+                            else
+                            {
+                                enemies[i].isCollidingRight = true;
+                            }
+                        }
+                        else if (!(enemies[i].hitbox.Intersects(enemies[f].hitbox)))
+                        {
+                            enemies[i].isCollidingLeft = false;
+                            enemies[i].isCollidingRight = false;
+                        }
+                    }
+                }
+            }
             for (int i = 0; i < enemies.Count; i++)
             {
-                if(Character1.hitbox.Right >= enemies[i].hitbox.Left-15 && Character1.hitbox.Right <= enemies[i].hitbox.Left + 15)
+                if (Character1.hitbox.Right >= enemies[i].hitbox.Left - 15 && Character1.hitbox.Right <= enemies[i].hitbox.Left + 15)
                 {
                     Character1.isCollidingRight = true;
                     enemies[i].isCollidingLeft = true;
                     Character1.isCollidingLeft = false;
                     enemies[i].isCollidingRight = false;
                 }
-                if(Character1.hitbox.Left >= enemies[i].hitbox.Right-15 && Character1.hitbox.Left <= enemies[i].hitbox.Right + 15)
+                if (Character1.hitbox.Left >= enemies[i].hitbox.Right - 15 && Character1.hitbox.Left <= enemies[i].hitbox.Right + 15)
                 {
                     Character1.isCollidingLeft = true;
                     enemies[i].isCollidingRight = true;
@@ -230,7 +239,7 @@ namespace Game1
                 {
                     //add health info here
                     ////add collision here
-                    
+
                     //if (Character1.isFlipped)
                     //{
                     //    Character1.isCollidingLeft = true;
@@ -301,12 +310,16 @@ namespace Game1
                         level++;
                         //actually make it get harder with each level
                         enemies.RemoveAt(i);
-                        
+
                         //Enemy1.health = 200;
                         //         enemies.Add(new Enemy(sheet, new Vector2(90, 350), Color.Red));
-
+                        Character1.health += 100;
                         enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
-                        if(level >= 3)
+                        if (level >= 2)
+                        {
+                            enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                        }
+                        if (level >= 5)
                         {
                             enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
                         }
@@ -320,7 +333,7 @@ namespace Game1
                 {
                     enemies[i].characterDead = true;
                 }
-                
+
             }
             CharacterHealthLabel.text = Character1.health.ToString();
 
@@ -341,16 +354,16 @@ namespace Game1
             {
                 Character1.Draw(spriteBatch, pixel);
 
-               // Enemy1.Draw(spriteBatch/*, pixel*/);
+                // Enemy1.Draw(spriteBatch/*, pixel*/);
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     enemies[i].Draw(spriteBatch, pixel);
                     spriteBatch.DrawString(font, enemies[i].jumpspeed.ToString(), new Vector2(0, 100), Color.Fuchsia);
                     spriteBatch.DrawString(font, enemies[i].jumping.ToString(), new Vector2(0, 150), Color.LightGoldenrodYellow);
                     spriteBatch.DrawString(font, enemies[i].currentState.ToString(), new Vector2(0, 200), Color.MediumAquamarine);
-                    
-                }
 
+                }
+                spriteBatch.DrawString(font, Character1.currentState.ToString(), new Vector2(0, 225), Color.LemonChiffon);
                 CharacterHealthLabel.draw(spriteBatch);
                 EnemyHealthLabel.draw(spriteBatch);
                 LevelLabel.draw(spriteBatch);
@@ -360,7 +373,7 @@ namespace Game1
                 PlayGameLabel.draw(spriteBatch);
             }
 
-            if(Character1.currentState == Character.characterState.Death)
+            if (Character1.currentState == Character.characterState.Death)
             {
                 LoseLabel.draw(spriteBatch);
             }

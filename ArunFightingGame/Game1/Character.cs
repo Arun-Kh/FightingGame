@@ -319,42 +319,56 @@ namespace Game1
                     initialPosition = currentAnimation.Position;
                     jumpSpeed = initialjumpspeed;
                     // currentAnimation.Y -= jumpSpeed;
-
                     jumping = true;
+                    ChangeState(characterState.Jump);
 
                 }
             }
             if (jumping)
             {
-                ChangeState(characterState.Jump);
+              //  ChangeState(characterState.Jump);
                 isCollidingLeft = false;
                 isCollidingRight = false;
                 //jumping:
 
-                //jumpSpeed -= gravity;
-                //currentAnimation.Y -= jumpSpeed;
+                jumpSpeed -= gravity;
+                currentAnimation.Y -= jumpSpeed;
                 //if(currentAnimation.)
-                if (currentAnimation.FirstLoop && jumpSpeed < 0)
+                if(jumpSpeed < 0 && currentState == characterState.Run)
+                {
+                    ChangeState(characterState.Jump);
+                    currentAnimation.FirstFreezeFrame();
+                }
+                if (currentAnimation.FirstLoop && jumpSpeed < 0 && currentState == characterState.Jump)
                 {
                     currentAnimation.FirstFreezeFrame();
                 }
-            }
-            //jumpSpeed -= gravity;
-            //currentAnimation.Y -= jumpSpeed;
-         //   if(/*jumpSpeed >= 0 && */!jumping)
-//            {
+                // }
+                //jumpSpeed -= gravity;
+                //currentAnimation.Y -= jumpSpeed;
+                //   if(/*jumpSpeed >= 0 && */!jumping)
+                //            {
 
-                jumpSpeed -= gravity;
-                currentAnimation.Y -= jumpSpeed;   
-          //  }
-            if (currentAnimation.Y  > 350/*+ currentAnimation.SourceRectangle.Value.Height > graphics.Viewport.Height*/) // yeet
-            {
-                //hit the ground
-                jumping = false;
-                //set Y position to ground
-                currentAnimation.Y = 350;
-                ChangeState(characterState.Idle);
+                //jumpSpeed -= gravity;
+                //currentAnimation.Y -= jumpSpeed;
+                //  }
+                if (currentAnimation.Y > 350/*+ currentAnimation.SourceRectangle.Value.Height > graphics.Viewport.Height*/)
+                {
+                    //hit the ground
+                    //set Y position to ground
+                    currentAnimation.Y = 350;
+                    ChangeState(characterState.Idle);
+
+                    jumping = false;
+
+                }
             }
+            if (currentAnimation.Y > 350)
+            {
+         //       jumpSpeed -= gravity;
+         //       currentAnimation.Y -= jumpSpeed;
+            }
+
             //    }
             //if(currentAnimation.X >= (graphics.Viewport.Width - currentAnimation.Image.Width))
             //{
@@ -436,18 +450,18 @@ namespace Game1
             {
                 ChangeState(characterState.Idle);
             }
-            if(currentState == characterState.Kick1 || currentState == characterState.Kick2 || currentState == characterState.Kick3 || currentState == characterState.Punch1 || currentState == characterState.Punch2)
+            if (currentState == characterState.Kick1 || currentState == characterState.Kick2 || currentState == characterState.Kick3 || currentState == characterState.Punch1 || currentState == characterState.Punch2)
             {
-                jumping = false;
+                //jumping = false;
             }
-                //else if (!currentAnimation.FirstLoop && jumping)
-                //{
-                //    ChangeState(characterState.Jump);
-                //}
+            //else if (!currentAnimation.FirstLoop && jumping)
+            //{
+            //    ChangeState(characterState.Jump);
+            //}
 
 
-                //changing the origin if the image is flipped:
-                if (isFlipped)
+            //changing the origin if the image is flipped:
+            if (isFlipped)
             {
                 //currentAnimation.Origin = new Vector2(currentAnimation.Origin.X + currentAnimation.SourceRectangle.Value.Width, currentAnimation.Origin.Y);
                 //currentAnimation.ChangeSourceRectanglePosition();
