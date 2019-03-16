@@ -46,6 +46,7 @@ namespace Game1
 
         public void attack()
         {
+
             if (!characterDead)
             {
                 Random rand = new Random();
@@ -71,6 +72,7 @@ namespace Game1
                 }
 
             }
+
         }
         public void Update(GameTime gameTime, Vector2 CharacterPostion, bool characterDead, int graphicsHeight)
         {
@@ -80,7 +82,10 @@ namespace Game1
             }
             if (!dead)
             {
-
+                if(isCollidingRight && !jumping)
+                {
+                //    currentAnimation.X -= 50;
+                }
                 if (getHit == true)
                 {
                     stun(gameTime);
@@ -108,6 +113,16 @@ namespace Game1
                     health = 0;
                 }
 
+                if (isCollidingLeft)
+                {
+                    Velocity = 0;
+                    ChangeState(characterState.Idle);
+                }
+                if (isCollidingRight)
+                {
+                    Velocity = 0;
+                    ChangeState(characterState.Idle);
+                }
 
                 if (!stunBool && !characterDead)
                 {
@@ -152,6 +167,8 @@ namespace Game1
                         flip = true;
                         Velocity = -Speed;
                     }
+                    
+
                    
                     if ((currentAnimation.X > CharacterPostion.X + 150 || currentAnimation.X < CharacterPostion.X - 150) && !jumping)
                     {
