@@ -63,7 +63,7 @@ namespace Game1
 
         Label CharacterHealthLabel;
 
-        Label EnemyHealthLabel;
+        // Label EnemyHealthLabel;
 
         Label PlayGameLabel;
 
@@ -83,11 +83,15 @@ namespace Game1
 
         int level = 1;
 
+        //int deadEnemies = 0;
+
         bool playing = false;
 
         Enemy Enemy1;
 
         List<Enemy> enemies = new List<Enemy>();
+
+        List<Label> enemyHealthLabels = new List<Label>();
 
         public Game1()
         {
@@ -114,7 +118,7 @@ namespace Game1
 
             CharacterHealthLabel = new Label(health, new Vector2(10, 10), Color.Green, font);
 
-            EnemyHealthLabel = new Label(health, new Vector2(100, 10), Color.Red, font);
+            //    EnemyHealthLabel = new Label(health, new Vector2(100, 10), Color.Red, font);
 
             PlayGameLabel = new Label(("press 'space' to start"), new Vector2(300, 100), Color.Red, font);
 
@@ -122,11 +126,15 @@ namespace Game1
 
             LoseLabel = new Label("You Lose!", new Vector2(350, 200), Color.LightYellow, font);
 
-          // enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+            enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+
+            enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+
 
             for (int i = 0; i < 2; i++)
             {
-                enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                //   enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                enemyHealthLabels.Add(new Label(" ", new Vector2(100 + (i * 40), 10), Color.Red, font));
             }
 
 
@@ -175,8 +183,8 @@ namespace Game1
                     //    Enemy1.isCollidingRight = false;
 
 
-                 //   enemies[i].isCollidingLeft = false;
-                //    enemies[i].isCollidingRight = false;
+                    //   enemies[i].isCollidingLeft = false;
+                    //    enemies[i].isCollidingRight = false;
 
                 }
             }
@@ -184,41 +192,54 @@ namespace Game1
             {
                 for (int f = 0; f < enemies.Count; f++)
                 {
-                   if (!(i == f))
+                    if (!(i == f))
                     {
-                        if(enemies[i].hitbox.Right >= enemies[f].hitbox.Left - 15 && enemies[i].hitbox.Right <= enemies[i].hitbox.Left + 15)
+                        if (enemies[i].hitbox.Right >= enemies[f].hitbox.Left - 15 && enemies[i].hitbox.Right <= enemies[i].hitbox.Left + 15)
                         {
-                            
-                                enemies[i].isCollidingLeft = true;
-                               // enemies[f].isCollidingRight = true;
+
+                            enemies[i].isCollidingLeft = true;
+                            //     enemies[i].isCollidingRight = false;
+                            // enemies[f].isCollidingRight = true;
                             //    enemies[i].isCollidingRight = false;
-                               // enemies[f].isCollidingLeft = false;
-                        
+                            // enemies[f].isCollidingLeft = false;
+
                         }
-                        if (enemies[i].hitbox.Left <= enemies[f].hitbox.Right - 15 && enemies[i].hitbox.Left >= enemies[f].hitbox.Right + 15)
+                        else if (enemies[i].hitbox.Left <= enemies[f].hitbox.Right - 15 && enemies[i].hitbox.Left >= enemies[f].hitbox.Right + 15)
                         {
                             enemies[i].isCollidingRight = true;
-                          //  enemies[f].isCollidingLeft = true;
-                          //  enemies[i].isCollidingLeft = false;
-                          //  enemies[f].isCollidingRight = false;
+                            //   enemies[i].isCollidingLeft = false;
+                            //  enemies[f].isCollidingLeft = true;
+                            //  enemies[i].isCollidingLeft = false;
+                            //  enemies[f].isCollidingRight = false;
                         }
-                   }
+
+
+                        else if (!(enemies[i].hitbox.Left <= enemies[f].hitbox.Right - 15 && enemies[i].hitbox.Left >= enemies[f].hitbox.Right + 15) && !(Character1.hitbox.Intersects(enemies[i].hitbox)))
+                        {
+                            enemies[i].isCollidingLeft = false;
+
+                        }
+                        else if (!(enemies[i].hitbox.Right >= enemies[f].hitbox.Left - 15 && enemies[i].hitbox.Right <= enemies[i].hitbox.Left + 15) && !(Character1.hitbox.Intersects(enemies[i].hitbox)))
+                        {
+                            enemies[i].isCollidingRight = false;
+                        }
+                    }
                 }
             }
-            
+
             for (int i = 0; i < enemies.Count; i++)
             {
                 if (Character1.hitbox.Right >= enemies[i].hitbox.Left - 15 && Character1.hitbox.Right <= enemies[i].hitbox.Left + 15/*(enemies[i].hitbox.Width-15)*/)
                 {
                     Character1.isCollidingRight = true;
-                   // enemies[i].isCollidingLeft = true;
+                    // enemies[i].isCollidingLeft = true;
                     Character1.isCollidingLeft = false;
-                  //  enemies[i].isCollidingRight = false;
+                    //  enemies[i].isCollidingRight = false;
                 }
                 if (Character1.hitbox.Left <= enemies[i].hitbox.Right - 15 && Character1.hitbox.Left <= enemies[i].hitbox.Right + 15/*(enemies[i].hitbox.Width - 15)*/)
                 {
                     Character1.isCollidingLeft = true;
-                   // enemies[i].isCollidingRight = true;
+                    // enemies[i].isCollidingRight = true;
                     Character1.isCollidingRight = false;
                     //enemies[i].isCollidingLeft = false;
                 }
@@ -280,13 +301,15 @@ namespace Game1
                     }
                 }
             }
+            int deadEnemies = 0;
+
             for (int i = 0; i < enemies.Count; i++)
             {
-                int deadEnemies = 0;
                 if (enemies[i].currentState == Character.characterState.Death)
                 {
                     enemies[i].dead = true;
                     deadEnemies++;
+                  //  enemyHealthLabels.RemoveAt(i);
                 }
                 if (deadEnemies >= enemies.Count/*enemies[i].dead*/)
                 {
@@ -298,18 +321,24 @@ namespace Game1
                         level++;
                         //actually make it get harder with each level
                         enemies.RemoveAt(i);
+                        enemyHealthLabels.Clear();
 
                         //Enemy1.health = 200;
                         //         enemies.Add(new Enemy(sheet, new Vector2(90, 350), Color.Red));
                         Character1.health += 100;
                         enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                        enemyHealthLabels.Add(new Label(" ", new Vector2(100 , 10), Color.Red, font));
                         if (level >= 2)
                         {
                             enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                            enemyHealthLabels.Add(new Label(" ", new Vector2(140 , 10), Color.Red, font));
+
                         }
                         if (level >= 5)
                         {
                             enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                            enemyHealthLabels.Add(new Label(" ", new Vector2(180, 10), Color.Red, font));
+
                         }
                         deadEnemies = 0;
                         //  Enemy1.dead = false;
@@ -325,7 +354,14 @@ namespace Game1
             }
             CharacterHealthLabel.text = Character1.health.ToString();
 
-            EnemyHealthLabel.text = enemies[0].health.ToString();
+            //EnemyHealthLabel.text = enemies[0].health.ToString();
+
+            for (int i = 0; i < enemyHealthLabels.Count; i++)
+            {
+                enemyHealthLabels[i].text = enemies[i].health.ToString();
+            }
+
+
 
             LevelLabel.text = "LEVEL " + level.ToString();
 
@@ -341,20 +377,27 @@ namespace Game1
             if (playing)
             {
                 Character1.Draw(spriteBatch, pixel);
-
+                spriteBatch.DrawString(font, levelUpTimer.ToString(), new Vector2(300, 10), Color.White);
+                //  spriteBatch.DrawString(font, deadEnemies.ToString(), new Vector2(440, 10), Color.YellowGreen);
                 // Enemy1.Draw(spriteBatch/*, pixel*/);
+                for (int i = 0; i < enemyHealthLabels.Count; i++)
+                {
+                    enemyHealthLabels[i].draw(spriteBatch);
+
+                }
+
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     enemies[i].Draw(spriteBatch, pixel);
                     spriteBatch.DrawString(font, enemies[i].jumpspeed.ToString(), new Vector2(0, 100), Color.Fuchsia);
                     spriteBatch.DrawString(font, enemies[i].jumping.ToString(), new Vector2(0, 150), Color.LightGoldenrodYellow);
                     //spriteBatch.DrawString(font, enemies[i].currentState.ToString(), new Vector2(0, 200), Color.MediumAquamarine);
-                    spriteBatch.DrawString(font, "left: " + enemies[i].isCollidingLeft.ToString(), new Vector2(0, 200 +(i*14)), Color.Gainsboro);
+                    spriteBatch.DrawString(font, "left: " + enemies[i].isCollidingLeft.ToString(), new Vector2(0, 200 + (i * 14)), Color.Gainsboro);
                     spriteBatch.DrawString(font, "right: " + enemies[i].isCollidingRight.ToString(), new Vector2(0, 250 + (i * 14)), Color.Gainsboro);
                 }
                 spriteBatch.DrawString(font, Character1.currentState.ToString(), new Vector2(0, 225), Color.LemonChiffon);
                 CharacterHealthLabel.draw(spriteBatch);
-                EnemyHealthLabel.draw(spriteBatch);
+                //EnemyHealthLabel.draw(spriteBatch);
                 LevelLabel.draw(spriteBatch);
             }
             if (!playing)

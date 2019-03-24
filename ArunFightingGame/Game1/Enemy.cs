@@ -31,8 +31,8 @@ namespace Game1
         float initialJumpSpeed = 15f;
         public float jumpspeed = 15f;
 
-        TimeSpan enemyDeathTimer = TimeSpan.Zero;
-        TimeSpan enemyDeathTime = TimeSpan.FromMilliseconds(150);
+        //TimeSpan enemyDeathTimer = TimeSpan.Zero;
+        //TimeSpan enemyDeathTime = TimeSpan.FromMilliseconds(150);
 
         TimeSpan enemyHitTimer = TimeSpan.Zero;
         TimeSpan reduceEnemyHealthTime = TimeSpan.FromMilliseconds(2);
@@ -167,9 +167,16 @@ namespace Game1
                         flip = true;
                         Velocity = -Speed;
                     }
-                    
+                    if(isCollidingLeft)
+                    {
+                        Velocity += 10;
+                    }
+                    if (isCollidingRight)
+                    {
+                        Velocity -= 10;
+                    }
 
-                   
+
                     if ((currentAnimation.X > CharacterPostion.X + 150 || currentAnimation.X < CharacterPostion.X - 150) && !jumping)
                     {
                         //Vector2 initialPosition = currentPositon;
@@ -272,8 +279,8 @@ namespace Game1
                 Vector2 initialPosition = currentPositon;
 
                 ChangeState(characterState.Jump);
-                isCollidingLeft = false;
-                isCollidingRight = false;
+                //isCollidingLeft = false;
+                //isCollidingRight = false;
                 //jumping:
 
                 jumpspeed -= gravity;
@@ -298,6 +305,7 @@ namespace Game1
                 {
                     //hit the ground
                     jumping = false;
+                    
                     //set Y position to ground
                     currentAnimation.Y = 350;//initialPosition.Y;
                     jumpspeed = initialJumpSpeed;
@@ -323,6 +331,19 @@ namespace Game1
             currentAnimation.Tint = Color.Red; //make a default color 
 
         }
+
+        public void pushBack(bool positive)
+        {
+            if (positive)
+            {
+                currentAnimation.X += 20;
+            }
+            else
+            {
+                currentAnimation.X -= 20;
+            }
+        }
+
 
         //public void jump(int graphicsHeight, Vector2 CharacterPostion)
         //{
