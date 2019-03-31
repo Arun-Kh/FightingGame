@@ -26,6 +26,7 @@ namespace Game1
         TimeSpan attackTime = TimeSpan.FromMilliseconds(1500);
         public new float Speed { get; set; } = 2.4f;
         public int defaultHealth = 230; //default health used after respawing
+        public int health = 300;
         public bool jumping = false;
         float gravity = .5f;
         float initialJumpSpeed = 15f;
@@ -35,7 +36,7 @@ namespace Game1
         //TimeSpan enemyDeathTime = TimeSpan.FromMilliseconds(150);
 
         TimeSpan enemyHitTimer = TimeSpan.Zero;
-        TimeSpan reduceEnemyHealthTime = TimeSpan.FromMilliseconds(2);
+        TimeSpan reduceEnemyHealthTime = TimeSpan.FromMilliseconds(50);
 
         public bool characterDead = false;
 
@@ -94,7 +95,7 @@ namespace Game1
                     {
                         if (isPowerfulEnemy == 1)
                         {
-                            health -= 50;
+                            health -= 30;
                             moveback(gameTime, true);
                         }
                         if (isPowerfulEnemy == 0)
@@ -169,11 +170,11 @@ namespace Game1
                     }
                     if(isCollidingLeft)
                     {
-                        Velocity += 10;
+                        //Velocity += 10;
                     }
                     if (isCollidingRight)
                     {
-                        Velocity -= 10;
+                        //Velocity -= 10;
                     }
 
 

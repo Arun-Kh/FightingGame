@@ -126,12 +126,12 @@ namespace Game1
 
             LoseLabel = new Label("You Lose!", new Vector2(350, 200), Color.LightYellow, font);
 
-            enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+            enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 100), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
 
-            enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+            //       enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(110, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
 
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < enemies.Count; i++)
             {
                 //   enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
                 enemyHealthLabels.Add(new Label(" ", new Vector2(100 + (i * 40), 10), Color.Red, font));
@@ -194,19 +194,21 @@ namespace Game1
                 {
                     if (!(i == f))
                     {
-                        if (enemies[i].hitbox.Right >= enemies[f].hitbox.Left - 15 && enemies[i].hitbox.Right <= enemies[i].hitbox.Left + 15)
+                        if (enemies[i].hitbox.Intersects(enemies[f].hitbox) && !(enemies[i].isFlipped))//(enemies[i].hitbox.Right >= enemies[f].hitbox.Left - 15 && enemies[i].hitbox.Right <= enemies[i].hitbox.Left + 15)
                         {
 
-                            enemies[i].isCollidingLeft = true;
+                            enemies[i].isCollidingRight = true;
+                            enemies[i].isCollidingLeft = false;
                             //     enemies[i].isCollidingRight = false;
                             // enemies[f].isCollidingRight = true;
                             //    enemies[i].isCollidingRight = false;
                             // enemies[f].isCollidingLeft = false;
 
                         }
-                        else if (enemies[i].hitbox.Left <= enemies[f].hitbox.Right - 15 && enemies[i].hitbox.Left >= enemies[f].hitbox.Right + 15)
+                        else if (enemies[i].hitbox.Intersects(enemies[f].hitbox) && enemies[i].isFlipped)// (enemies[i].hitbox.Left <= enemies[f].hitbox.Right - 15 && enemies[i].hitbox.Left >= enemies[f].hitbox.Right + 15)
                         {
-                            enemies[i].isCollidingRight = true;
+                            enemies[i].isCollidingLeft = true;
+                            enemies[i].isCollidingRight = false;
                             //   enemies[i].isCollidingLeft = false;
                             //  enemies[f].isCollidingLeft = true;
                             //  enemies[i].isCollidingLeft = false;
@@ -223,12 +225,33 @@ namespace Game1
                         {
                             enemies[i].isCollidingRight = false;
                         }
+
+
                     }
                 }
             }
 
+            if(Character1.hitbox.Left <= 0)
+            {
+                Character1.isCollidingLeft = true;
+            }
+            
+            if(Character1.hitbox.Right >= GraphicsDevice.Viewport.Width)
+            {
+                Character1.isCollidingRight = true;
+            }
+
+
             for (int i = 0; i < enemies.Count; i++)
             {
+                if(enemies[i].hitbox.Right >= GraphicsDevice.Viewport.Width)
+                {
+                    enemies[i].isCollidingRight = true;
+                }
+                if(enemies[i].hitbox.Left <= 0)
+                {
+                    enemies[i].isCollidingLeft = true;
+                }
                 if (Character1.hitbox.Right >= enemies[i].hitbox.Left - 15 && Character1.hitbox.Right <= enemies[i].hitbox.Left + 15/*(enemies[i].hitbox.Width-15)*/)
                 {
                     Character1.isCollidingRight = true;
@@ -243,7 +266,13 @@ namespace Game1
                     Character1.isCollidingRight = false;
                     //enemies[i].isCollidingLeft = false;
                 }
+                if (!(Character1.hitbox.Intersects(enemies[i].hitbox)))
+                {
+                    Character1.isCollidingRight = false;
+                    Character1.isCollidingLeft = false;
+                }
 
+                
                 if (Character1.hitbox.Intersects(enemies[i].hitbox))
                 {
                     //add health info here
@@ -282,18 +311,14 @@ namespace Game1
                     if (Character1.currentState == Character.characterState.Kick1 || Character1.currentState == Character.characterState.Kick2 || Character1.currentState == Character.characterState.Kick3)
                     {
                         enemies[i].getsHit(gameTime, true);
-
                     }
                     if ((Character1.currentState == Character.characterState.Punch1) || (Character1.currentState == Character.characterState.Punch2))
                     {
                         enemies[i].getsHit(gameTime, false);
-
                     }
-
                     if (enemies[i].currentState == Character.characterState.Kick1 || enemies[i].currentState == Character.characterState.Kick2 || enemies[i].currentState == Character.characterState.Kick3)
                     {
                         Character1.getsHit(gameTime, true);
-
                     }
                     if (enemies[i].currentState == Character.characterState.Punch1 || enemies[i].currentState == Character.characterState.Punch2)
                     {
@@ -309,7 +334,7 @@ namespace Game1
                 {
                     enemies[i].dead = true;
                     deadEnemies++;
-                  //  enemyHealthLabels.RemoveAt(i);
+                    //  enemyHealthLabels.RemoveAt(i);
                 }
                 if (deadEnemies >= enemies.Count/*enemies[i].dead*/)
                 {
@@ -320,25 +345,30 @@ namespace Game1
 
                         level++;
                         //actually make it get harder with each level
-                        enemies.RemoveAt(i);
+                        //enemies.RemoveAt(i);
+                        enemies.Clear();
                         enemyHealthLabels.Clear();
 
                         //Enemy1.health = 200;
                         //         enemies.Add(new Enemy(sheet, new Vector2(90, 350), Color.Red));
                         Character1.health += 100;
                         enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
-                        enemyHealthLabels.Add(new Label(" ", new Vector2(100 , 10), Color.Red, font));
+                        enemyHealthLabels.Add(new Label(" ", new Vector2(100, 10), Color.Red, font));
                         if (level >= 2)
                         {
-                            enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
-                            enemyHealthLabels.Add(new Label(" ", new Vector2(140 , 10), Color.Red, font));
-
+                           // enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                           // enemyHealthLabels.Add(new Label(" ", new Vector2(140, 10), Color.Red, font));
+                            enemies[i].health = 400;
                         }
                         if (level >= 5)
                         {
-                            enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
-                            enemyHealthLabels.Add(new Label(" ", new Vector2(180, 10), Color.Red, font));
-
+                           // enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                           // enemyHealthLabels.Add(new Label(" ", new Vector2(180, 10), Color.Red, font));
+                            enemies[i].health = 600;
+                        }
+                        if(level >= 7)
+                        {
+                            enemies[i].health = 600 + ((level - 6)*50);
                         }
                         deadEnemies = 0;
                         //  Enemy1.dead = false;
