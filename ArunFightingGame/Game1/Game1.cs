@@ -25,7 +25,6 @@ namespace Game1
     //change the font
     //make levels and stuff
     //change the font please
-    //give the character a dumb name
     //fix the label that displays the level
     //fix the die (make the body go onto the ground when it dies and then float up off the screen or fade away)
     //fix the issue where the enemy's health doesn't go down
@@ -101,7 +100,6 @@ namespace Game1
 
         protected override void Initialize()
         {
-
             base.Initialize();
         }
 
@@ -188,6 +186,8 @@ namespace Game1
 
                 }
             }
+
+
             for (int i = 0; i < enemies.Count; i++)
             {
                 for (int f = 0; f < enemies.Count; f++)
@@ -234,23 +234,23 @@ namespace Game1
             if(Character1.hitbox.Left <= 0)
             {
                 Character1.isCollidingLeft = true;
+                Character1.isCollidingRight = false;
             }
-            
             if(Character1.hitbox.Right >= GraphicsDevice.Viewport.Width)
             {
                 Character1.isCollidingRight = true;
+                Character1.isCollidingLeft = false;
             }
-
 
             for (int i = 0; i < enemies.Count; i++)
             {
                 if(enemies[i].hitbox.Right >= GraphicsDevice.Viewport.Width)
                 {
-                    enemies[i].isCollidingRight = true;
+                  //  enemies[i].isCollidingRight = true;
                 }
                 if(enemies[i].hitbox.Left <= 0)
                 {
-                    enemies[i].isCollidingLeft = true;
+                    //enemies[i].isCollidingLeft = true;
                 }
                 if (Character1.hitbox.Right >= enemies[i].hitbox.Left - 15 && Character1.hitbox.Right <= enemies[i].hitbox.Left + 15/*(enemies[i].hitbox.Width-15)*/)
                 {
@@ -276,36 +276,6 @@ namespace Game1
                 if (Character1.hitbox.Intersects(enemies[i].hitbox))
                 {
                     //add health info here
-                    ////add collision here
-
-                    //if (Character1.isFlipped)
-                    //{
-                    //    Character1.isCollidingLeft = true;
-                    //}
-                    //else
-                    //{
-                    //    Character1.isCollidingLeft = false;
-                    //}
-                    //if (!Character1.isFlipped)
-                    //{
-                    //    Character1.isCollidingRight = true;
-                    //}
-                    //else
-                    //{
-                    //    Character1.isCollidingRight = false;
-                    //}
-                    //if (enemies[i].isFlipped)
-                    //{
-                    //    enemies[i].isCollidingLeft = true;
-                    //}
-                    //else if (!enemies[i].isFlipped) // facing right
-                    //{
-                    //    enemies[i].isCollidingRight = true;
-                    //}
-                    //else
-                    //{
-                    //    enemies[i].isCollidingRight = false;
-                    //}
 
 
                     if (Character1.currentState == Character.characterState.Kick1 || Character1.currentState == Character.characterState.Kick2 || Character1.currentState == Character.characterState.Kick3)
@@ -350,13 +320,13 @@ namespace Game1
                         enemyHealthLabels.Clear();
 
                         //Enemy1.health = 200;
-                        //         enemies.Add(new Enemy(sheet, new Vector2(90, 350), Color.Red));
+                        //enemies.Add(new Enemy(sheet, new Vector2(90, 350), Color.Red));
                         Character1.health += 100;
-                        enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                        enemies.Add(new Enemy(sheet, new Vector2(200, 350), Color.Red, GraphicsDevice.Viewport.Bounds));
                         enemyHealthLabels.Add(new Label(" ", new Vector2(100, 10), Color.Red, font));
                         if (level >= 2)
                         {
-                           // enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                           //enemies.Add(new Enemy(sheet, new Vector2(300, 350), Color.Red, GraphicsDevice.Viewport.Bounds));
                            // enemyHealthLabels.Add(new Label(" ", new Vector2(140, 10), Color.Red, font));
                             enemies[i].health = 400;
                         }
@@ -424,6 +394,11 @@ namespace Game1
                     //spriteBatch.DrawString(font, enemies[i].currentState.ToString(), new Vector2(0, 200), Color.MediumAquamarine);
                     spriteBatch.DrawString(font, "left: " + enemies[i].isCollidingLeft.ToString(), new Vector2(0, 200 + (i * 14)), Color.Gainsboro);
                     spriteBatch.DrawString(font, "right: " + enemies[i].isCollidingRight.ToString(), new Vector2(0, 250 + (i * 14)), Color.Gainsboro);
+
+                    spriteBatch.DrawString(font, "rightx: " + enemies[i].hitbox.Right.ToString(), new Vector2(0, 300 + (i * 14)), Color.Gainsboro);
+                    //spriteBatch.DrawString(font, "width" + GraphicsDevice.Viewport.Width.ToString(), new Vector2(0, 350 + (i * 14)), Color.Gainsboro);
+
+
                 }
                 spriteBatch.DrawString(font, Character1.currentState.ToString(), new Vector2(0, 225), Color.LemonChiffon);
                 CharacterHealthLabel.draw(spriteBatch);
