@@ -66,6 +66,8 @@ namespace Game1
 
         Label PlayGameLabel;
 
+        bool losing = false;
+
         Label LoseLabel;
 
         SpriteFont font;
@@ -153,8 +155,12 @@ namespace Game1
 
             KeyboardState ks = Keyboard.GetState();
 
-            if (ks.IsKeyDown(Keys.Space))
-            { playing = true; }
+            if (ks.IsKeyDown(Keys.Space) && lastKS.IsKeyUp(Keys.Space))
+            {
+                playing = true;
+                losing = false;
+            }
+
             if (playing)
             {
 
@@ -163,8 +169,6 @@ namespace Game1
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     enemies[i].Update(gameTime, Character1.currentPositon, Character1.dead, GraphicsDevice.Viewport.Height);
-                    //    enemies[i].jump(GraphicsDevice.Viewport.Height, Character1.currentPositon);
-
                 }
 
                 //   Enemy1.Update(gameTime, Character1.currentPositon, Character1.dead);
@@ -175,12 +179,10 @@ namespace Game1
             {
                 if (!(Character1.hitbox.Intersects(enemies[i].hitbox)))
                 {
-                    Character1.isCollidingLeft = false;
-                    Character1.isCollidingRight = false;
+                    //Character1.isCollidingLeft = false;
+                    //Character1.isCollidingRight = false;
                     //      Enemy1.isCollidingLeft = false;
                     //    Enemy1.isCollidingRight = false;
-
-
                     //   enemies[i].isCollidingLeft = false;
                     //    enemies[i].isCollidingRight = false;
 
@@ -225,18 +227,16 @@ namespace Game1
                         {
                             enemies[i].isCollidingRight = false;
                         }
-
-
                     }
                 }
             }
 
-            if(Character1.hitbox.Left <= 0)
+            if (Character1.hitbox.Left <= 0)
             {
                 Character1.isCollidingLeft = true;
                 Character1.isCollidingRight = false;
             }
-            if(Character1.hitbox.Right >= GraphicsDevice.Viewport.Width)
+            if (Character1.hitbox.Right >= GraphicsDevice.Viewport.Width)
             {
                 Character1.isCollidingRight = true;
                 Character1.isCollidingLeft = false;
@@ -244,35 +244,35 @@ namespace Game1
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                if(enemies[i].hitbox.Right >= GraphicsDevice.Viewport.Width)
+                if (enemies[i].hitbox.Right >= GraphicsDevice.Viewport.Width)
                 {
-                  //  enemies[i].isCollidingRight = true;
+                    //  enemies[i].isCollidingRight = true;
                 }
-                if(enemies[i].hitbox.Left <= 0)
+                if (enemies[i].hitbox.Left <= 0)
                 {
                     //enemies[i].isCollidingLeft = true;
                 }
-                if (Character1.hitbox.Right >= enemies[i].hitbox.Left - 15 && Character1.hitbox.Right <= enemies[i].hitbox.Left + 15/*(enemies[i].hitbox.Width-15)*/)
+                if (Character1.hitbox.Right >= enemies[i].hitbox.Left - 30 && Character1.hitbox.Right <= enemies[i].hitbox.Left + 30/*(enemies[i].hitbox.Width-15)*/)
                 {
                     Character1.isCollidingRight = true;
                     // enemies[i].isCollidingLeft = true;
                     Character1.isCollidingLeft = false;
                     //  enemies[i].isCollidingRight = false;
                 }
-                if (Character1.hitbox.Left <= enemies[i].hitbox.Right - 15 && Character1.hitbox.Left <= enemies[i].hitbox.Right + 15/*(enemies[i].hitbox.Width - 15)*/)
+                if (Character1.hitbox.Left >= enemies[i].hitbox.Right - 30 && Character1.hitbox.Left <= enemies[i].hitbox.Right + 30/*(enemies[i].hitbox.Width - 15)*/)
                 {
                     Character1.isCollidingLeft = true;
                     // enemies[i].isCollidingRight = true;
                     Character1.isCollidingRight = false;
                     //enemies[i].isCollidingLeft = false;
                 }
-                if (!(Character1.hitbox.Intersects(enemies[i].hitbox)))
+                if (!(Character1.hitbox.Intersects(enemies[i].hitbox)) && Character1.hitbox.Right <= GraphicsDevice.Viewport.Width)
                 {
                     Character1.isCollidingRight = false;
                     Character1.isCollidingLeft = false;
                 }
 
-                
+
                 if (Character1.hitbox.Intersects(enemies[i].hitbox))
                 {
                     //add health info here
@@ -322,23 +322,31 @@ namespace Game1
                         //Enemy1.health = 200;
                         //enemies.Add(new Enemy(sheet, new Vector2(90, 350), Color.Red));
                         Character1.health += 100;
-                        enemies.Add(new Enemy(sheet, new Vector2(200, 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+
+                        if (Character1.hitbox.X >= GraphicsDevice.Viewport.Width / 2)
+                        {
+                            enemies.Add(new Enemy(sheet, new Vector2(100, 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                        }
+                        else
+                        {
+                            enemies.Add(new Enemy(sheet, new Vector2(GraphicsDevice.Viewport.Width - 100, 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                        }
                         enemyHealthLabels.Add(new Label(" ", new Vector2(100, 10), Color.Red, font));
                         if (level >= 2)
                         {
-                           //enemies.Add(new Enemy(sheet, new Vector2(300, 350), Color.Red, GraphicsDevice.Viewport.Bounds));
-                           // enemyHealthLabels.Add(new Label(" ", new Vector2(140, 10), Color.Red, font));
+                            //enemies.Add(new Enemy(sheet, new Vector2(300, 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                            // enemyHealthLabels.Add(new Label(" ", new Vector2(140, 10), Color.Red, font));
                             enemies[i].health = 400;
                         }
                         if (level >= 5)
                         {
-                           // enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
-                           // enemyHealthLabels.Add(new Label(" ", new Vector2(180, 10), Color.Red, font));
+                            // enemies.Add(new Enemy(sheet, new Vector2(90 + rand.Next(10, 300), 350), Color.Red, GraphicsDevice.Viewport.Bounds));
+                            // enemyHealthLabels.Add(new Label(" ", new Vector2(180, 10), Color.Red, font));
                             enemies[i].health = 600;
                         }
-                        if(level >= 7)
+                        if (level >= 7)
                         {
-                            enemies[i].health = 600 + ((level - 6)*50);
+                            enemies[i].health = 600 + ((level - 6) * 50);
                         }
                         deadEnemies = 0;
                         //  Enemy1.dead = false;
@@ -389,18 +397,21 @@ namespace Game1
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     enemies[i].Draw(spriteBatch, pixel);
-                    spriteBatch.DrawString(font, enemies[i].jumpspeed.ToString(), new Vector2(0, 100), Color.Fuchsia);
-                    spriteBatch.DrawString(font, enemies[i].jumping.ToString(), new Vector2(0, 150), Color.LightGoldenrodYellow);
-                    //spriteBatch.DrawString(font, enemies[i].currentState.ToString(), new Vector2(0, 200), Color.MediumAquamarine);
-                    spriteBatch.DrawString(font, "left: " + enemies[i].isCollidingLeft.ToString(), new Vector2(0, 200 + (i * 14)), Color.Gainsboro);
-                    spriteBatch.DrawString(font, "right: " + enemies[i].isCollidingRight.ToString(), new Vector2(0, 250 + (i * 14)), Color.Gainsboro);
+                    //spriteBatch.DrawString(font, enemies[i].jumpspeed.ToString(), new Vector2(0, 100), Color.Fuchsia);
+                    //spriteBatch.DrawString(font, enemies[i].jumping.ToString(), new Vector2(0, 150), Color.LightGoldenrodYellow);
+                    ////spriteBatch.DrawString(font, enemies[i].currentState.ToString(), new Vector2(0, 200), Color.MediumAquamarine);
+                    //spriteBatch.DrawString(font, "left: " + enemies[i].isCollidingLeft.ToString(), new Vector2(0, 200 + (i * 14)), Color.Gainsboro);
+                    //spriteBatch.DrawString(font, "right: " + enemies[i].isCollidingRight.ToString(), new Vector2(0, 250 + (i * 14)), Color.Gainsboro);
 
-                    spriteBatch.DrawString(font, "rightx: " + enemies[i].hitbox.Right.ToString(), new Vector2(0, 300 + (i * 14)), Color.Gainsboro);
-                    //spriteBatch.DrawString(font, "width" + GraphicsDevice.Viewport.Width.ToString(), new Vector2(0, 350 + (i * 14)), Color.Gainsboro);
+                    //spriteBatch.DrawString(font, "rightx: " + enemies[i].hitbox.Right.ToString(), new Vector2(0, 300 + (i * 14)), Color.Gainsboro);
+                    ////spriteBatch.DrawString(font, "width" + GraphicsDevice.Viewport.Width.ToString(), new Vector2(0, 350 + (i * 14)), Color.Gainsboro);
 
 
                 }
                 spriteBatch.DrawString(font, Character1.currentState.ToString(), new Vector2(0, 225), Color.LemonChiffon);
+
+                spriteBatch.DrawString(font, "left: " + Character1.isCollidingLeft.ToString(), new Vector2(0, 200 + (1 * 14)), Color.Gainsboro);
+                spriteBatch.DrawString(font, "right: " + Character1.isCollidingRight.ToString(), new Vector2(0, 250 + (1 * 14)), Color.PaleGoldenrod);
                 CharacterHealthLabel.draw(spriteBatch);
                 //EnemyHealthLabel.draw(spriteBatch);
                 LevelLabel.draw(spriteBatch);
@@ -413,7 +424,18 @@ namespace Game1
             if (Character1.currentState == Character.characterState.Death)
             {
                 LoseLabel.draw(spriteBatch);
+                losing = true;
+                if (Character1.deathAnimationFinished == true && losing)
+                {
+                    playing = false;
+                    losing = false;
+                    //Character1.ChangeState(Character.characterState.Idle);
+                }
             }
+
+            spriteBatch.DrawString(font, "playing: " + playing.ToString(), new Vector2(10, 350), Color.DodgerBlue);
+
+            spriteBatch.DrawString(font, "losing: " + losing.ToString(), new Vector2(10, 400), Color.Firebrick);
 
             //spriteBatch.DrawString(font,"Intersect:" + (Character1.hitbox.Intersects(Enemy1.hitbox)).ToString(), Vector2.Zero, Color.Yellow);
 

@@ -57,6 +57,7 @@ namespace Game1
         bool jumping = false;
         public bool isCollidingLeft = false;
         public bool isCollidingRight = false;
+        public bool deathAnimationFinished = false;
         public int health = 200; // controls health for both character and enemy 
         //try making giving seperate health to both and make it a survival game
 
@@ -232,7 +233,10 @@ namespace Game1
 
                 currentAnimation.Y -= 1;
                 currentAnimation.Tint = new Color(currentAnimation.Tint.R - 1, currentAnimation.Tint.G - 1, currentAnimation.Tint.B - 1);
-
+                 if(deathTimer >= TimeSpan.FromMilliseconds(15000))
+                {
+                    deathAnimationFinished = true;
+                }
             }
             else
             {
@@ -397,7 +401,7 @@ namespace Game1
                     isFlipped = true;
                 }
 
-                if (ks.IsKeyDown(Keys.D) && !isCollidingRight /*|| ks.IsKeyDown(Keys.A)*/)
+                if (ks.IsKeyDown(Keys.D) && currentAnimation.X <= graphics.Viewport.Width && !isCollidingRight /*|| ks.IsKeyDown(Keys.A)*/)
                 {
                     if (!jumping && !stunBool)
                     {

@@ -23,7 +23,7 @@ namespace Game1
         bool flip = false;
         public new bool isAttackingWeak = false;
         public new bool isAttackingPowerful = false;
-        TimeSpan attackTime = TimeSpan.FromMilliseconds(1500);
+        TimeSpan attackTime = TimeSpan.FromMilliseconds(1000);
         public new float Speed { get; set; } = 2.4f;
         public int defaultHealth = 230; //default health used after respawing
         public int health = 300;
