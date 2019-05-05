@@ -155,7 +155,7 @@ namespace Game1
 
             KeyboardState ks = Keyboard.GetState();
 
-            if (ks.IsKeyDown(Keys.Space) && lastKS.IsKeyUp(Keys.Space))
+            if (ks.IsKeyDown(Keys.Space) && lastKS.IsKeyUp(Keys.Space) && !losing)
             {
                 playing = true;
                 losing = false;
@@ -221,7 +221,6 @@ namespace Game1
                         else if (!(enemies[i].hitbox.Left <= enemies[f].hitbox.Right - 15 && enemies[i].hitbox.Left >= enemies[f].hitbox.Right + 15) && !(Character1.hitbox.Intersects(enemies[i].hitbox)))
                         {
                             enemies[i].isCollidingLeft = false;
-
                         }
                         else if (!(enemies[i].hitbox.Right >= enemies[f].hitbox.Left - 15 && enemies[i].hitbox.Right <= enemies[i].hitbox.Left + 15) && !(Character1.hitbox.Intersects(enemies[i].hitbox)))
                         {
@@ -266,7 +265,7 @@ namespace Game1
                     Character1.isCollidingRight = false;
                     //enemies[i].isCollidingLeft = false;
                 }
-                if (!(Character1.hitbox.Intersects(enemies[i].hitbox)) && Character1.hitbox.Right <= GraphicsDevice.Viewport.Width)
+                if (!(Character1.hitbox.Intersects(enemies[i].hitbox)) && Character1.hitbox.Right <= GraphicsDevice.Viewport.Width && Character1.hitbox.Left >= 0)
                 {
                     Character1.isCollidingRight = false;
                     Character1.isCollidingLeft = false;
@@ -368,8 +367,19 @@ namespace Game1
             {
                 enemyHealthLabels[i].text = enemies[i].health.ToString();
             }
+            if(Character1.currentState == Character.characterState.Death)
+            {
+                losing = true;
+            }
 
-
+            if(losing)
+            {
+                if (Character1.deathAnimationFinished == true)
+                {
+                    playing = false;
+                    losing = false;
+                }
+            }
 
             LevelLabel.text = "LEVEL " + level.ToString();
 
@@ -393,20 +403,11 @@ namespace Game1
                     enemyHealthLabels[i].draw(spriteBatch);
 
                 }
+                
 
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     enemies[i].Draw(spriteBatch, pixel);
-                    //spriteBatch.DrawString(font, enemies[i].jumpspeed.ToString(), new Vector2(0, 100), Color.Fuchsia);
-                    //spriteBatch.DrawString(font, enemies[i].jumping.ToString(), new Vector2(0, 150), Color.LightGoldenrodYellow);
-                    ////spriteBatch.DrawString(font, enemies[i].currentState.ToString(), new Vector2(0, 200), Color.MediumAquamarine);
-                    //spriteBatch.DrawString(font, "left: " + enemies[i].isCollidingLeft.ToString(), new Vector2(0, 200 + (i * 14)), Color.Gainsboro);
-                    //spriteBatch.DrawString(font, "right: " + enemies[i].isCollidingRight.ToString(), new Vector2(0, 250 + (i * 14)), Color.Gainsboro);
-
-                    //spriteBatch.DrawString(font, "rightx: " + enemies[i].hitbox.Right.ToString(), new Vector2(0, 300 + (i * 14)), Color.Gainsboro);
-                    ////spriteBatch.DrawString(font, "width" + GraphicsDevice.Viewport.Width.ToString(), new Vector2(0, 350 + (i * 14)), Color.Gainsboro);
-
-
                 }
                 spriteBatch.DrawString(font, Character1.currentState.ToString(), new Vector2(0, 225), Color.LemonChiffon);
 
@@ -423,15 +424,20 @@ namespace Game1
 
             if (Character1.currentState == Character.characterState.Death)
             {
-                LoseLabel.draw(spriteBatch);
-                losing = true;
-                if (Character1.deathAnimationFinished == true && losing)
-                {
-                    playing = false;
-                    losing = false;
-                    //Character1.ChangeState(Character.characterState.Idle);
-                }
+                //losing = true;
+                //if (Character1.deathAnimationFinished == true && losing)
+                //{
+                //    playing = false;
+                //    losing = false;
+                //    //Character1.ChangeState(Character.characterState.Idle);
+                //}
             }
+
+            if(losing)
+            {
+                LoseLabel.draw(spriteBatch);
+            }
+
 
             spriteBatch.DrawString(font, "playing: " + playing.ToString(), new Vector2(10, 350), Color.DodgerBlue);
 
@@ -454,7 +460,6 @@ namespace Game1
 
             //spriteBatch.DrawString(font, "Enemy dead: " + Enemy1.dead.ToString(), new Vector2(500, 0), Color.DarkSalmon);
             //    idle.Draw(spriteBatch);            
-            // TODO: Add your drawing code here
             spriteBatch.End();
             base.Draw(gameTime);
         }
