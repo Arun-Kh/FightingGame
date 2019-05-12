@@ -282,6 +282,8 @@ namespace Game1
             if (health <= 0)
             {
                 die(gameTime);
+                dead = true;
+
             }
             //DYING:
             //if (health <= 0)
@@ -388,7 +390,7 @@ namespace Game1
             //    isCollidingRight = false; 
             //}
             //WALKIKNG:
-            if (!stunBool)
+            if (!stunBool && !dead)
             {
                 if (ks.IsKeyDown(Keys.A) && !isCollidingLeft)
                 {

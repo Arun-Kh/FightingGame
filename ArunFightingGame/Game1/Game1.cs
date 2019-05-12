@@ -23,10 +23,8 @@ namespace Game1
     //Make more enemies
     //Fix the issue with the list of enemies
     //change the font
-    //make levels and stuff
     //change the font please
     //fix the label that displays the level
-    //fix the die (make the body go onto the ground when it dies and then float up off the screen or fade away)
     //fix the issue where the enemy's health doesn't go down
     //make the characters not go off the screen
     //change the font
@@ -120,7 +118,7 @@ namespace Game1
 
             //    EnemyHealthLabel = new Label(health, new Vector2(100, 10), Color.Red, font);
 
-            PlayGameLabel = new Label(("press 'space' to start"), new Vector2(300, 100), Color.Red, font);
+            PlayGameLabel = new Label(("press 'space' to start"), new Vector2(320, 100), Color.Red, font);
 
             LevelLabel = new Label(("Level 0"), new Vector2(590, 10), Color.Wheat, font);
 
@@ -160,6 +158,7 @@ namespace Game1
                 playing = true;
                 losing = false;
             }
+
 
             if (playing)
             {
@@ -347,6 +346,10 @@ namespace Game1
                         {
                             enemies[i].health = 600 + ((level - 6) * 50);
                         }
+                        if (losing)
+                        {
+                            enemies[i].health = 200;
+                        }
                         deadEnemies = 0;
                         //  Enemy1.dead = false;
                         levelUpTimer = TimeSpan.Zero;
@@ -367,12 +370,14 @@ namespace Game1
             {
                 enemyHealthLabels[i].text = enemies[i].health.ToString();
             }
-            if(Character1.currentState == Character.characterState.Death)
+            if (Character1.currentState == Character.characterState.Death && !losing)
             {
                 losing = true;
+                //level = 1;
+                //Character1.health = 200;
             }
 
-            if(losing)
+            if (losing)
             {
                 if (Character1.deathAnimationFinished == true)
                 {
@@ -394,7 +399,7 @@ namespace Game1
             spriteBatch.Begin();
             if (playing)
             {
-                Character1.Draw(spriteBatch, pixel);
+                Character1.Draw(spriteBatch/*, pixel*/);
                 spriteBatch.DrawString(font, levelUpTimer.ToString(), new Vector2(300, 10), Color.White);
                 //  spriteBatch.DrawString(font, deadEnemies.ToString(), new Vector2(440, 10), Color.YellowGreen);
                 // Enemy1.Draw(spriteBatch/*, pixel*/);
@@ -403,11 +408,11 @@ namespace Game1
                     enemyHealthLabels[i].draw(spriteBatch);
 
                 }
-                
+
 
                 for (int i = 0; i < enemies.Count; i++)
                 {
-                    enemies[i].Draw(spriteBatch, pixel);
+                    enemies[i].Draw(spriteBatch/*, pixel*/);
                 }
                 spriteBatch.DrawString(font, Character1.currentState.ToString(), new Vector2(0, 225), Color.LemonChiffon);
 
@@ -433,7 +438,7 @@ namespace Game1
                 //}
             }
 
-            if(losing)
+            if (losing)
             {
                 LoseLabel.draw(spriteBatch);
             }
